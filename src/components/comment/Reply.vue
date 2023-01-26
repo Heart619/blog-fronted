@@ -13,7 +13,7 @@
 
 <script>
 export default {
-    props:['id','blogId'],
+    props:['id','blogId', 'blogAuthor'],
     data(){
         return {
             replyForm: {
@@ -44,7 +44,7 @@ export default {
                         blogId: comment.blogId,
                         userId: this.userInfo.id,
                         parentCommentId: this.id,
-                        adminComment: this.userInfo.id === this.$store.state.userInfo.id,
+                        adminComment: this.userInfo.id === this.blogAuthor,
                         avatar: this.userInfo.avatar,
                         email: this.userInfo.email,
                         nickname: this.userInfo.nickname,

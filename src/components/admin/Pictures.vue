@@ -101,21 +101,19 @@ export default {
     },
     async submitImg(url) {
       if (url === ' ') return;
-      await this.$blog.post('/saveImg', {
-        'img': {
+      await this.$blog.post('/pictures/saveImg', {
           'image': url,
-          'isUse': 1
-        }
+          'type': 2
       }).then(({data: res}) => {
         this.pictureList.push({
           'id': res.data,
           'image': url,
-          'isUse': 1
+          'type': 2,
         });
       })
     },
     async getPicList() {
-      const {data: res} = await this.$blog.get('/getAllImg')
+      const {data: res} = await this.$blog.get('/pictures/getWallImg')
       this.pictureList = res.data
     },
     async deletePic(id, key) {
@@ -131,9 +129,9 @@ export default {
       if (confirmResult !== 'confirm') {
         return this.$message.info('已取消删除')
       }
-      this.$blog.post(`/img/delete`, {
+      this.$blog.post(`/pictures/delete`, {
         id,
-        key
+        'image': key
       }).then(res => {
         var temp = [];
         for (let i = 0; i < this.pictureList.length; ++i)

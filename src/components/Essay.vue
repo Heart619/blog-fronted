@@ -3,11 +3,14 @@
     <el-empty v-if="essayList.length === 0" description="当前暂无随笔"></el-empty>
     <el-container v-if="essayList.length !== 0">
       <el-timeline class="animate__animated animate__fadeInLeft">
-        <el-timeline-item :color="essay.borderColor" v-for="essay in essayList" :key="essay.id" :timestamp="essay.createTime| dataFormat" placement="top">
+        <el-timeline-item :color="essay.borderColor" v-for="essay in essayList" :key="essay.id" :timestamp="essay.createTime | dataFormat" placement="top">
           <el-card style="letter-spacing: 1px;" :style="calcuteStyle(essay)">
             <h2 v-if="essay.title">{{essay.title}}</h2>
             <div class="typo" v-html="essay.content"></div>
-            <el-image v-if="essay.image" :src="essay.image"></el-image>
+            <p>
+              <el-avatar size="small" :src="$store.state.oss + essay.avatar"></el-avatar>
+              {{ essay.nickName }}
+            </p>
           </el-card>
         </el-timeline-item>
       </el-timeline>

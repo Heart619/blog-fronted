@@ -25,12 +25,12 @@ export default {
     data() {
         return {
             user:{
-                username:'',
-                password:'',
-                loginProvince:'陕西省',
-                loginCity:'咸阳市',
-                loginLat:34.27, //纬度
-                loginLng:108.08, //经度
+                username: '',
+                password: '',
+                loginProvince: '未知',
+                loginCity: '未知',
+                loginLat: 0, //纬度
+                loginLng: 0, //经度
             },
             // 表单数据绑定对象
             loginForm: {
@@ -74,10 +74,8 @@ export default {
                 this.user.loginCity = local.result.ad_info.city
                 this.user.loginLat = local.result.location.lat
                 this.user.loginLng = local.result.location.lng
-                const {data: res} = await this.$blog.post('/login', {
-                    user:this.user
-                });
-                if (res.code !== 200) return this.$message({message: '用户名或密码错误', type: 'error', offset: 80})
+                const {data: res} = await this.$blog.post('/user/login', this.user);
+                if (res.code !== 0) return this.$message({message: '用户名或密码错误', type: 'error', offset: 80})
                 this.$message({message: '登录成功', type: 'success', offset: 80});
                 this.$refs.loginFormRef.resetFields()
                 window.sessionStorage.setItem("token", JSON.stringify(res.data.token));
@@ -88,11 +86,10 @@ export default {
         },
         async getLocalCity(){
             let data = {
-                key: 'IUTBZ-UHAKU-PD6VI-BZEEY-N3YT3-SCB6J',
+                key: this.$store.state.threeLocationKey,
                 output:'jsonp'
             }
             let url = 'https://apis.map.qq.com/ws/location/v1/ip'
-            // console.log(this.$jsonp(url, data))
             const res = await this.$jsonp(url, data)
             return res
         }

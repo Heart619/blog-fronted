@@ -7,11 +7,12 @@ export default new Vuex.Store({
   state: {
     userInfo: JSON.parse(window.sessionStorage.getItem('user')),
     token: JSON.parse(window.sessionStorage.getItem('token')),
-    administrator:JSON.parse(window.sessionStorage.getItem('user'))!==null&&JSON.parse(window.sessionStorage.getItem('user')).type==='1',
+    administrator:JSON.parse(window.sessionStorage.getItem('user'))!==null&&JSON.parse(window.sessionStorage.getItem('user')).type > 0,
     loginFormVisiable:false,
     registorFormVisiable:false,
     pageName:'index',
-    oss: 'http://roxuynt15.hd-bkt.clouddn.com/'
+    oss: 'http://roxuynt15.hd-bkt.clouddn.com/',
+    threeLocationKey: 'IUTBZ-UHAKU-PD6VI-BZEEY-N3YT3-SCB6J'
   },
   mutations: {
     // 改变页面
@@ -22,7 +23,7 @@ export default new Vuex.Store({
     getUserInfo(state){
       state.userInfo = JSON.parse(window.sessionStorage.getItem('user'))
       state.token = JSON.parse(window.sessionStorage.getItem('token'))
-      if (state.userInfo !== null && state.userInfo.type == '1') {
+      if (state.userInfo !== null && state.userInfo.type > 0) {
         state.administrator = true
       } else {
         state.administrator = false

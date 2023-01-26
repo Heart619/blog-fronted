@@ -23,7 +23,7 @@
                 <i v-if="selected" class="el-icon-back" @click="updateBlogList"></i>
                 <span>{{selectMethod}}</span>
               </div>
-              <span>共 <span style="color: #3a8ee6; font-size: 20px">{{totalcount}}</span> 篇</span>
+              <span>共 <span style="color: #3a8ee6; font-size: 20px">{{ totalcount }}</span> 篇</span>
             </div>
               <el-empty v-if="blogList.length === 0" style="width: 800px; height: 500px"></el-empty>
               <el-row v-if="blogList.length !== 0" v-for="blog in blogList"
@@ -190,7 +190,6 @@ export default {
     let idx = 0;
     let that = this
     let timer = setTimeout( function fn() {
-      // console.log(this.intro)
       that.intro = that.intro+ str.substring(idx,idx+1)
       idx++
       if (idx>str.length){

@@ -1,5 +1,5 @@
 <template>
-    <el-dialog class="dialog" title="请登录" :visible.sync="registorFormVisiable" @close="resetForm" width="400px" center>
+    <el-dialog class="dialog" title="注册" :visible.sync="registorFormVisiable" @close="resetForm" width="400px" center>
         <el-form ref="FormRef" :model="Form" :rules="FormRules" class="form" label-width="80px" label-position="left">
             <!--        昵称-->
             <el-form-item label="昵称" prop="nickname">
@@ -117,10 +117,8 @@ export default {
                 this.user.loginCity = local.result.ad_info.city
                 this.user.loginLat = local.result.location.lat
                 this.user.loginLng = local.result.location.lng
-                const {data: res} = await this.$blog.post('/registor', {
-                    user: this.user
-                })
-                if (res.code !== 200) return this.$message.error("注册失败")
+                const {data: res} = await this.$blog.post('/user/register', this.user)
+                if (res.code !== 0) return this.$message.error("注册失败")
                 // console.log(res)
                 this.$refs.FormRef.resetFields()
                 this.$message({message: '注册成功', type: 'success', offset: 80});

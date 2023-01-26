@@ -6,8 +6,8 @@
                 <a class="comment-author">
                     <span>{{rp.nickname}}</span>
                     <el-tag v-if="rp.adminComment === true" effect="plain" size="mini">作者</el-tag>
-                    <span v-if="rp.parentComment!==null">回复</span>
-                    <span v-if="rp.parentComment!=null&&rp.parentComment.id!==parentId"> {{rp.parentComment.nickname}}</span>
+                    <span v-if="rp.parentComment !== undefined && rp.parentComment.id !== parentId">回复</span>
+                    <span v-if="rp.parentComment !== undefined && rp.parentComment.id !== parentId"> {{rp.parentComment.nickname}}</span>
                 </a>
                 <div class="comment-data">
                     <span class="date">{{rp.createTime | dataFormat3}}</span>

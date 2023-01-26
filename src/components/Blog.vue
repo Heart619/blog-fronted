@@ -13,7 +13,7 @@
         </div>
         <div>
           <i class="el-icon-view"></i>
-          <span>{{blog.views}}</span>
+          <span>{{blog.views + 1}}</span>
         </div>
       </div>
       <el-image class="blog-pic" v-if="blog.firstPicture !== '' && blog.firstPicture !== undefined && blog.firstPicture !== null" :src="$store.state.oss + blog.firstPicture"></el-image>
@@ -68,14 +68,14 @@
         </div>
         <div v-for="cmt in rootCmtTree" :key="cmt.id">
           <comment :cmt="cmt" :parent-id="-1" :rp-active-id="rpActiveId"></comment>
-          <reply style="margin-left: 40px" v-if="rpActiveId === cmt.id" :id="cmt.id" :blog-id="blog.id"
+          <reply style="margin-left: 40px" v-if="rpActiveId === cmt.id" :blog-author="blog.userId" :id="cmt.id" :blog-id="blog.id"
                  v-on:quit="cancel" v-on:newCmt="replyComp"></reply>
           <span v-else class="reply" @click="rpActiveId = cmt.id">回复</span>
           <span v-if="administrator || userInfo && cmt.userId === userInfo.id" class="delete"
                 @click="deleteComment(cmt.id)">删除</span>
           <div style="margin-left: 40px" v-for="rp in cmt.children" :key="rp.id">
             <comment :cmt="rp" :parent-id="cmt.id" :rp-active-id="rpActiveId"></comment>
-            <reply style="margin-left: 40px" v-if="rpActiveId === rp.id" :id="rp.id" :blog-id="blog.id"
+            <reply style="margin-left: 40px" v-if="rpActiveId === rp.id" :blog-author="blog.userId" :id="rp.id" :blog-id="blog.id"
                    v-on:quit="cancel" v-on:newCmt="replyComp"></reply>
             <span v-else class="reply" @click="rpActiveId = rp.id">回复</span>
             <span v-if=" administrator || userInfo && rp.userId === userInfo.id" class="delete"
@@ -174,11 +174,12 @@ export default {
       this.blog = res.data
       this.blogId = this.$route.params.id
 
-      this.$blog.get(`comment/getBlogComment/${this.$route.query.id}`).then(({data: res}) => {
+      this.$blog.get(`comment/comments/${this.$route.query.id}`).then(({data: res}) => {
         if (res.code !== 0) {
           this.$message.error("网络繁忙，请稍后再试")
           return;
         }
+        // console.log(res.data)
         let parents = res.data.filter(value => value.parentCommentId === -1)
         let children = res.data.filter(value => value.parentCommentId !== -1)
         let translator = (parents, children) => {
@@ -188,7 +189,12 @@ export default {
                 let temp = JSON.parse(JSON.stringify(children))
                 temp.splice(index, 1)
                 translator([child], temp)
-                typeof parent.children !== undefined ? parent.children.push(child) : parent.children = [child]
+                child.parentComment = JSON.parse(JSON.stringify(parent))
+                if (parent.children === undefined) {
+                  parent.children = [child]
+                } else {
+                  parent.children.push(child)
+                }
               }
             })
           })
@@ -207,17 +213,12 @@ export default {
           }
           dfs(children)
           return cds;
-          // return cds.sort((a, b) => {
-          //   return a.createTime.localeCompare(b.createTime)
-          // })
         }
-
         parents.forEach((parent) => {
           parent.children = getChildList(parent.children)
         })
-
         this.rootCmtTree = parents
-
+        // console.log(this.rootCmtTree)
         setTimeout(() => {
           Prism.highlightAll()
         }, 0)
@@ -272,7 +273,7 @@ export default {
       const {data: res} = await this.$blog.get(`/comment/${id}/delete`)
       if (res.code === 0) {
         await this.getBlogInfomation()
-        this.$message({message: res.message, type: 'success', offset: 80});
+        this.$message({message: "删除评论成功！", type: 'success', offset: 80});
       } else {
         this.$message({message: "删除评论失败！", type: 'error', offset: 80});
       }

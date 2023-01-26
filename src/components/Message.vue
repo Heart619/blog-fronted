@@ -22,7 +22,7 @@
         </el-card>
 
         <el-card v-if="messageList.length>0" class="animate__animated animate__fadeInLeft">
-            <ul style="padding: 0;" class="comment-list">
+            <ul style="padding: 0" class="comment-list">
                 <li class="comment" v-for="ms in messageList" :key="ms.id">
                     <el-avatar v-if="ms.avatar!==''" :src="$store.state.oss + ms.avatar" ></el-avatar>
                     <el-avatar v-else  icon="el-icon-user-solid"></el-avatar>
@@ -127,7 +127,6 @@ export default {
           }
           // console.log(res)
         }
-
     },
 }
 </script>

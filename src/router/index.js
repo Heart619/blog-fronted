@@ -69,7 +69,7 @@ const routes = [
             else {
                 const type = userInfo.type
                 // console.log(type)
-                if (type !== '1') return next('/error')
+                if (type === 0) return next('/error')
                 next()
             }
             next()

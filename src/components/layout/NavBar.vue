@@ -173,11 +173,11 @@ export default {
     },
     changePage(name) {
       // console.log(name)
-      this.$store.commit('changePage',name)
+      this.$store.commit('changePage', name)
     }
     ,
     showLFV() {
-      this.bgUrl = "url(\"http://www.dmoe.cc/random.php\")"
+      // this.bgUrl = "url(\"http://www.dmoe.cc/random.php\")"
       this.$store.commit('showLFV')
     },
     showRFV() {
@@ -208,6 +208,9 @@ export default {
     ,
     // 跳转首页
     toIndex() {
+      if (this.$route.path === '/index') {
+        return;
+      }
       ++this.shade;
       this.$router.push({path: '/index'});
     },
@@ -230,9 +233,9 @@ export default {
     ,
 // 进入管理界面
     manageBlog() {
-      this.$router.push('/admin')
-    }
-    ,
+      if (this.$store.state.userInfo.type === 2) this.$router.push('/admin')
+      else this.$router.push('/admin/administrator')
+    },
 // 展开菜单栏
     menuExpend() {
       this.menuHiddenVisiable = !this.menuHiddenVisiable

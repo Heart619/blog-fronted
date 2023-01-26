@@ -30,7 +30,7 @@
                 </el-table-column>
                 <el-table-column label="管理员" min-width="70px">
                     <template slot-scope="scope">
-                        <el-switch active-value="1" inactive-value="0" v-model="scope.row.type" :disabled="userInfo.id == scope.row.id || scope.row.id == 1"
+                        <el-switch active-value="1" inactive-value="0" v-model="scope.row.type" :disabled="scope.row.id !== 2"
                                    @change="userStateChanged(scope.row)">
                         </el-switch>
                     </template>
@@ -66,30 +66,27 @@ export default {
     },
     methods: {
         async getUserList() {
-            const {data: res} = await this.$blog.get('users');
-            if (res.code === 200) {
+            const {data: res} = await this.$blog.get('/user/list');
+            if (res.code === 0) {
                 if (this.search !== '') {
                     let st = this.search
                     let reg = RegExp(st)
-                    res.data = res.data.filter((item) => {
+                    res.page.list = res.page.list.filter((item) => {
                         return reg.test(item.nickname) || reg.test(item.username)
                     })
                 }
-                this.userList = res.data
+                this.userList = res.page.list
             } else {
                 this.$message.error("获取用户信息失败！")
             }
         },
         searchUser() {
-            // console.log(this.search)
             this.getUserList()
         },
         // 修改用户权限
         async userStateChanged(row) {
-            const {data: res} = await this.$blog.post('/admin/user', {
-                user: row
-            });
-            if (res.code !== 200) return this.$message.error("修改权限失败")
+            const {data: res} = await this.$blog.post('/user/update', row);
+            if (res.code !== 0) return this.$message.error("修改权限失败")
             this.$message.success("修改权限成功")
 
         },
@@ -108,10 +105,10 @@ export default {
             if (confirmResult !== 'confirm') {
                 return this.$message.info('已取消删除')
             }
-            const {data: res} = await this.$blog.get(`/admin/users/${id}/delete`)
-            if (res.code !== 200) return this.$message.error('删除用户失败！')
+            const {data: res} = await this.$blog.get(`/user/del/${id}`)
+            if (res.code !== 0) return this.$message.error('删除用户失败！')
             this.$message.success('删除用户成功！')
-            this.getUserList()
+            await this.getUserList()
         }
     }
 }

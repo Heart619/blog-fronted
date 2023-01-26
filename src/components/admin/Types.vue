@@ -6,7 +6,7 @@
             <el-breadcrumb-item>分类管理</el-breadcrumb-item>
         </el-breadcrumb>
         <el-card shadow="never">
-            <el-button type="primary" @click="createTypeDialogFormVisible = true">新建分类</el-button>
+            <el-button type="primary" @click="addType">新建分类</el-button>
             <el-table :data="typeList" border stripe>
                 <el-table-column type="index"></el-table-column>
                 <el-table-column label="图片" prop="pic_url" width="150px">
@@ -167,9 +167,8 @@ export default {
             this.dialogImageUrl = res.data
         },
         backPage() {
-            this.createTypeDialogFormVisible = false
-            this.createTypeForm.name = ''
-            this.$refs.createTypeFormRef.resetFields()
+          this.createTypeForm.name = ''
+          this.createTypeDialogFormVisible = false
         },
         editBlogDialog(row) {
             this.type = row
@@ -180,6 +179,11 @@ export default {
             this.fileList = [{name: row.picUrl, url: row.picUrl}]
             this.createTypeForm.name = row.name
             this.createTypeDialogFormVisible = true
+        },
+        addType() {
+          this.createTypeForm.name = ''
+          this.dialogImageUrl = ''
+          this.createTypeDialogFormVisible = true
         }
     },
 }

@@ -11,7 +11,7 @@
         <el-col :sm="8" :lg="6" v-for="tag in tagList" style="margin-bottom: 20px;" :key="tag.id">
           <el-card shadow="hover" style="position:relative;border: 2px solid #eee;text-align: left">
             <div class="op" style="position: absolute;right: 5px;top: 5px">
-              <i @click="editTagById(tag.id)" class="el-icon-edit"
+              <i @click="editTagById(tag)" class="el-icon-edit"
                  style="color: #3a8ee6;margin-right: 5px"></i>
               <i @click="deleteTagById(tag.id)" class="el-icon-delete" style="color: red"></i>
             </div>
@@ -68,8 +68,9 @@ export default {
       }
     },
     // 根据id编辑标签
-    editTagById(id) {
-      this.tag.id = id
+    editTagById(row) {
+      this.tag.id = row.id
+      this.createTagForm.name = row.name
       this.createTagDialogFormVisible = true
     },
     // 创建新标签
@@ -97,7 +98,7 @@ export default {
         }
         this.createTagDialogFormVisible = false
         this.tag.id = null
-        this.$refs.createTagFormRef.resetFields()
+        this.createTagForm.name = ''
         this.$message.success(res.message)
       })
     },

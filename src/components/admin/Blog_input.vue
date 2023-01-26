@@ -120,12 +120,10 @@ export default {
     methods: {
       // 将图片上传到服务器，返回的地址替换到md中
       async imgAdd(pos, $file) {
-        console.log($file)
-        // console.log($file)
         let formdata = new FormData();
         formdata.append('file', $file);
-        const {data: res} = await this.$blog.post('/upload', formdata)
-        if (res.code === 200) {
+        const {data: res} = await this.$blog.post('/pictures/upload', formdata)
+        if (res.code === 0) {
           this.$refs.md.$img2Url(pos, res.data)
         }
       },
@@ -140,23 +138,19 @@ export default {
       },
         // 获取博客类型列表
         async getTypeList() {
-            const {data: res} = await this.$blog.get('/admin/getFullTypeList')
-            // console.log(res)
+            const {data: res} = await this.$blog.get('/type/getAllType')
             this.typeList = res.data
         },
         // 获取博客标签列表
         async getTagList() {
-            const {data: res} = await this.$blog.get('/admin/getFullTagList')
-            // console.log(res)
+            const {data: res} = await this.$blog.get('/tag/allTag')
             this.tagList = res.data
         },
         async submit() {
-            if (this.blog.id!==null){
-                const {data: res} = await this.$blog.post('/admin/blogs', {
-                    blog: this.blog
-                })
+            if (this.blog.id !== null){
+                const {data: res} = await this.$blog.post('/blog/update', this.blog)
                 // console.log(res)
-                if (res.code === 200) {
+                if (res.code === 0) {
                     this.publishDialogFormVisible = false
                     this.$router.go(-1);
                     return this.$message.success('修改博客成功！')
@@ -180,13 +174,14 @@ export default {
                 this.blog.tagIds = this.publishForm.tags.toString().replace(/\[|]/g, '');
                 this.blog.flag = this.publishForm.flag
                 // console.log(this.blog.content)
-                this.blog.user = JSON.parse(window.sessionStorage.getItem('user'))
-                const {data: res} = await this.$blog.post('/admin/blogs', {
-                    blog: this.blog
-                })
+                this.blog.userId = JSON.parse(window.sessionStorage.getItem('user')).id;
+                this.blog.typeId = this.blog.type.id
+                this.blog.type = undefined;
+                const {data: res} = await this.$blog.post('/blog/save', this.blog)
                 // console.log(res)
-                if (res.code === 200) {
+                if (res.code === 0) {
                     this.publishDialogFormVisible = false
+                    await this.$router.push({path: '/admin/blogs', query: {}})
                     return this.$message.success('发布博客成功！')
                 } else {
                     this.publishDialogFormVisible = false

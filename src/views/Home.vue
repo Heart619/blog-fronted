@@ -7,7 +7,7 @@
                     :collapse-transition="false" router
                     active-text-color="#409FFF">
                 <!--            一级菜单-->
-                <el-menu-item :index="item.path" v-for="item in menulist" :key="item.id">
+                <el-menu-item v-if="$store.state.userInfo.type === 2 || item.vis" :index="item.path" v-for="item in menulist" :key="item.id">
                     <i :class="iconsObj[item.id]"></i>
                     <span>{{item.authName}}</span>
                 </el-menu-item>
@@ -41,17 +41,17 @@ export default {
     data() {
         return {
             menulist: [
-                {id: 0, path: '/admin/index', authName: '后台首页'},
-                {id: 1, path: '/admin/blogs', authName: '博客管理'},
-                {id: 2, path: '/admin/users', authName: '用户管理'},
-                {id: 3, path: '/admin/blog-input', authName: '撰写博客'},
-                {id: 4, path: '/admin/types', authName: '分类管理'},
-                {id: 5, path: '/admin/tags', authName: '标签管理'},
-                {id: 6, path: '/admin/comments', authName: '评论管理'},
-                {id: 7, path: '/admin/essays', authName: '随笔管理'},
-                {id: 8, path: '/admin/projects', authName: '项目管理'},
-                {id: 9, path: '/admin/administrator', authName: '个人中心'},
-                {id: 10, path: '/admin/pictures', authName: '图片管理'},
+                {id: 0, path: '/admin/index', authName: '后台首页', vis: false},
+                {id: 1, path: '/admin/blogs', authName: '博客管理', vis: true},
+                {id: 2, path: '/admin/users', authName: '用户管理', vis: false},
+                {id: 3, path: '/admin/blog-input', authName: '撰写博客', vis: true},
+                {id: 4, path: '/admin/types', authName: '分类管理', vis: false},
+                {id: 5, path: '/admin/tags', authName: '标签管理', vis: false},
+                {id: 6, path: '/admin/comments', authName: '评论管理', vis: false},
+                {id: 7, path: '/admin/essays', authName: '随笔管理', vis: true},
+                {id: 8, path: '/admin/projects', authName: '项目管理', vis: false},
+                {id: 9, path: '/admin/administrator', authName: '个人中心', vis: true},
+                {id: 10, path: '/admin/pictures', authName: '图片管理', vis: true},
             ],
             iconsObj: {
                 '0': 'iconfont icon-menu_home',

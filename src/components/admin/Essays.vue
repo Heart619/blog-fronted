@@ -99,12 +99,10 @@ export default {
   methods: {
     // 将图片上传到服务器，返回的地址替换到md中
     async imgAdd(pos, $file) {
-      console.log($file)
-      // console.log($file)
       let formdata = new FormData();
       formdata.append('file', $file);
-      const {data: res} = await this.$blog.post('/upload', formdata)
-      if (res.code === 200) {
+      const {data: res} = await this.$blog.post('/pictures/upload', formdata)
+      if (res.code === 0) {
         this.$refs.md.$img2Url(pos, res.data)
       }
     },
@@ -119,8 +117,9 @@ export default {
     },
     // 获取随笔列表
     async getEssayList() {
-      const {data: res} = await this.$blog.get('/essay/list')
-      console.log(res)
+      const {data: res} = await this.$blog.post('/essay/list', {
+        userId: this.$store.state.userInfo.type === 2 ? undefined : this.$store.state.userInfo.id
+      })
       if (res.code === 0) {
         this.essayList = res.page.list
         this.essayList.forEach(item => {
@@ -142,12 +141,13 @@ export default {
       this.essay.title = this.publishForm.title
       this.essay.content = this.publishForm.content
       this.essay.color = this.publishForm.color
+      this.essay.avatar = this.$store.state.userInfo.avatar
+      this.essay.author = this.$store.state.userInfo.nickname
       this.essay.praise = 0
-      // console.log(this.essay)
       const {data: res} = await this.$blog.post('/essay/save', this.essay)
-      // console.log(res)
       if (res.code === 0) {
         this.publishDialogFormVisible = false
+        await this.getEssayList();
         this.activeName = 'first'
         return this.$message.success('发布随笔成功！')
       } else {
@@ -186,7 +186,6 @@ export default {
     },
     // 编辑随笔
     editByid(row) {
-      console.log(row)
       this.publishForm = row
       this.activeName = 'second'
     }
