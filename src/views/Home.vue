@@ -78,6 +78,7 @@ export default {
     watch: {
       $route(to, from) {
         if (to.name === false && this.$store.state.userInfo.type !== 2) {
+          this.$message.error("网络繁忙，请稍后再试")
           this.$router.push({path: from.path})
         }
       }

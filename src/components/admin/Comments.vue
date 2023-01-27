@@ -46,7 +46,11 @@ export default {
     methods: {
         // 获取评论列表
         async getCommentList(){
-            const {data: res} = await this.$blog.get('/comment/list')
+            const {data: res} = await this.$blog.get('/admin/comment/list');
+            if (res.code === 401) {
+              await this.$router.push({path: this.$store.state.errorPagePath})
+              return;
+            }
             this.commentList = res.page.list
         },
         // 删除评论
@@ -61,11 +65,15 @@ export default {
                         type: 'warning'
                     }
             ).then(async () => {
-              const {data: res} = await this.$blog.get(`/comment/${id}/delete`)
+              const {data: res} = await this.$blog.get(`/admin/comment/${id}/delete`);
               if (res.code === 0){
                 await this.getCommentList()
                 this.$message.success('删除成功！')
                 return
+              }
+              if (res.code === 401) {
+                await this.$router.push({path: this.$store.state.errorPagePath})
+                return;
               }
               this.$message.error('删除失败！')
             }).catch(err => {

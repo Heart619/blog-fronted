@@ -210,15 +210,19 @@ export default {
         // 修改博客首图
         async changePicSubmit(){
             this.blog.firstPicture = this.dialogImageUrl
-            const {data: res} = await this.$blog.post('/blog/updateImg', {
+            const {data: res} = await this.$blog.post('/admin/blog/updateImg', {
                 firstPicture: this.blog.firstPicture,
                 id: this.blog.id
             })
             // console.log(res)
-            if (res.code === 200) {
+            if (res.code === 0) {
                 this.editPicDialogFormVisible = false
                 return this.$message.success('修改首图成功！')
             } else {
+                if (res.code === 401) {
+                  await this.$router.push({path: this.$store.state.errorPagePath})
+                  return;
+                }
                 this.editPicDialogFormVisible = false
                 return this.$message.error('修改首图失败！')
             }
@@ -277,7 +281,11 @@ export default {
             if (confirmResult !== 'confirm') {
                 return this.$message.info('已取消删除')
             }
-            const {data: res} = await this.$blog.get('/blog/' + id + '/delete')
+            const {data: res} = await this.$blog.get('/admin/blog/' + id + '/delete');
+            if (res.code === 401) {
+              await this.$router.push({path: this.$store.state.errorPagePath})
+              return;
+            }
             if (res.code !== 0) return this.$message.error('删除博客失败！')
             this.$message.success('删除博客成功！')
             await this.getBlogList()
@@ -285,7 +293,11 @@ export default {
         // 编辑博客
         editBlogByid(blog) {
             // console.log(blog)
-          this.$blog.get(`/blog/default/${blog.id}`).then(({data: res}) => {
+          this.$blog.get(`/admin/blog/default/${blog.id}`).then(({data: res}) => {
+            if (res.code === 401) {
+              this.$router.push({path: this.$store.state.errorPagePath})
+              return;
+            }
             if (res.code === 0) {
               this.$router.push({
                 path: "/admin/blog-input",
@@ -318,10 +330,14 @@ export default {
         async changeTypeSubmit() {
             let blog = this.editTypeForm.blog
             // console.log(blog)
-            const {data: res} = await this.$blog.post('/blog/updateType', {
+            const {data: res} = await this.$blog.post('/admin/blog/updateType', {
                 id: blog.id,
                 type_id: this.editTypeForm.typeId
-            })
+            });
+            if (res.code === 401) {
+              await this.$router.push({path: this.$store.state.errorPagePath})
+              return;
+            }
             if (res.code === 0) {
                 this.editTypeDialogFormVisible = false
                 return this.$message.success('修改博客分类成功！')
@@ -353,7 +369,7 @@ export default {
                 return;
             }
 
-            await this.$blog.get(`/blog/${row.id}/createTag/${row.inputValue}`).then(({data: res}) => {
+            await this.$blog.get(`/admin/blog/${row.id}/createTag/${row.inputValue}`).then(({data: res}) => {
               if (res.code === 0) {
                 row.tags.push(res.data)
                 row.tagIds = row.tags.map(item => {
@@ -364,24 +380,27 @@ export default {
                 row.inputVisible = false
                 this.$message.success('新增博客标签成功！')
               } else {
+                if (res.code === 401) {
+                  this.$router.push({path: this.$store.state.errorPagePath})
+                  return;
+                }
                 this.$message.error('新增博客标签失败！')
-
               }
             }).catch(err => {
               this.$message.error("网络繁忙，请稍后再试")
             })
         },
-        // 创建新标签
-        async createTag(newTag) {
-            const {data: res} = await this.$blog.post('/admin/tags', {
-                tag: {name: newTag}
-            })
-            if (res.code !== 0) {
-                return null
-            } else  {
-                return res.data
-            }
-        },
+        // // 创建新标签
+        // async createTag(newTag) {
+        //     const {data: res} = await this.$blog.post('/admin/tags', {
+        //         tag: {name: newTag}
+        //     })
+        //     if (res.code !== 0) {
+        //         return null
+        //     } else  {
+        //         return res.data
+        //     }
+        // },
         // async uploadBlog(inputBlog) {
         //     // 提交数据库，保存修改
         //     const {data: res} = await this.$blog.post('/admin/blogs', {
@@ -399,13 +418,17 @@ export default {
                 return item.id
             }).toString().replace(/\[|]/g, '');
 
-            this.$blog.post('/blog/delTag', {
+            this.$blog.post('/admin/blog/delTag', {
               id: row.id,
               tagId: tag.id
             }).then(({data: res}) => {
               if (res.code === 0) {
                 this.$message.success('修改博客标签成功！')
               } else {
+                if (res.code === 401) {
+                  this.$router.push({path: this.$store.state.errorPagePath})
+                  return;
+                }
                 this.$message.error('修改博客标签失败！')
               }
             }).catch(err => {

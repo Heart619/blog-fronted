@@ -66,7 +66,7 @@ export default {
     },
     methods: {
         async getUserList() {
-            const {data: res} = await this.$blog.get('/user/list');
+            const {data: res} = await this.$blog.get('/admin/user/list');
             if (res.code === 0) {
                 if (this.search !== '') {
                     let st = this.search
@@ -77,6 +77,10 @@ export default {
                 }
                 this.userList = res.page.list
             } else {
+                if (res.code === 401) {
+                  await this.$router.push({path: this.$store.state.errorPagePath})
+                  return;
+                }
                 this.$message.error("获取用户信息失败！")
             }
         },
@@ -85,7 +89,11 @@ export default {
         },
         // 修改用户权限
         async userStateChanged(row) {
-            const {data: res} = await this.$blog.post('/user/update', row);
+            const {data: res} = await this.$blog.post('/admin/user/update', row);
+            if (res.code === 401) {
+              await this.$router.push({path: this.$store.state.errorPagePath})
+              return;
+            }
             if (res.code !== 0) return this.$message.error("修改权限失败")
             this.$message.success("修改权限成功")
 
@@ -105,7 +113,11 @@ export default {
             if (confirmResult !== 'confirm') {
                 return this.$message.info('已取消删除')
             }
-            const {data: res} = await this.$blog.get(`/user/del/${id}`)
+            const {data: res} = await this.$blog.get(`/admin/user/del/${id}`)
+            if (res.code === 401) {
+              await this.$router.push({path: this.$store.state.errorPagePath})
+              return;
+            }
             if (res.code !== 0) return this.$message.error('删除用户失败！')
             this.$message.success('删除用户成功！')
             await this.getUserList()

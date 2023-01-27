@@ -117,16 +117,24 @@ export default {
     },
     // 修改头像
     async setAvatar() {
-      const {data: res} = await this.$blog.post('/user/setAvatar', {
+      const {data: res} = await this.$blog.post('/admin/user/setAvatar', {
         avatar: this.imageUrl,
         id: this.userInfo.id
       })
+      if (res.code === 401) {
+        await this.$router.push({path: this.$store.state.errorPagePath})
+        return;
+      }
       this.userInfo = res.data
       window.sessionStorage.setItem('user', JSON.stringify(res.data))
       window.location.reload()
     },
     async changeUserInfo() {
-      const {data: res} = await this.$blog.post('/user/update', this.userFrom)
+      const {data: res} = await this.$blog.post('/admin/user/update', this.userFrom)
+      if (res.code === 401) {
+        await this.$router.push({path: this.$store.state.errorPagePath})
+        return;
+      }
       if (res.code === 0) {
         window.sessionStorage.setItem("user", JSON.stringify(this.userFrom));
         this.$store.commit('getUserInfo')
@@ -140,10 +148,14 @@ export default {
         this.$message.warning("两次密码输入不一致，请重新输入")
         return;
       }
-      this.$blog.post('/user/updatePwd', {
+      this.$blog.post('/admin/user/updatePwd', {
         newPwd: this.$md5(this.Form.newPwd),
         id: this.$store.state.userInfo.id
       }).then(({data: res}) => {
+        if (res.code === 401) {
+          this.$router.push({path: this.$store.state.errorPagePath})
+          return;
+        }
         if (res.code === 0) {
           this.userInfo = res.data
           window.sessionStorage.setItem('user', JSON.stringify(res.data))

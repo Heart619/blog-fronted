@@ -97,13 +97,17 @@ export default {
   },
   methods: {
     async getcountList() {
-      const {data: res} = await this.$blog.get('/blog/getBlogCount')
+      const {data: res} = await this.$blog.get('/admin/blog/getBlogCount')
+      const {data: res2} = await this.$blog.get('/admin/blog/getViewCount')
+      const {data: res3} = await this.$blog.get('/admin/blog/getAppreciateCount')
+      const {data: res4} = await this.$blog.get('/admin/comment/getCommentCount')
+      if (res === 401 || res2 === 401 || res3 === 401 || res4 === 401) {
+        await this.$router.push({path: this.$store.state.errorPagePath})
+        return;
+      }
       this.blogCount = res.data
-      const {data: res2} = await this.$blog.get('/blog/getViewCount')
       this.viewCount = res2.data
-      const {data: res3} = await this.$blog.get('/blog/getAppreciateCount')
       this.appreciateCount = res3.data
-      const {data: res4} = await this.$blog.get('/comment/getCommentCount')
       this.commentCount = res4.data
     },
     selectCard(id) {

@@ -82,14 +82,18 @@ export default {
         // console.log(this.tag)
         let res;
         if (this.tag.id === null) {
-          res = await this.$blog.post(`/tag/save`, {
+          res = await this.$blog.post(`/admin/tag/save`, {
             'name': _this.tag.name
           })
         } else {
-          res = await this.$blog.post(`/tag/update`, {
+          res = await this.$blog.post(`/admin/tag/update`, {
             'id': _this.tag.id,
             'name': _this.tag.name
           })
+        }
+        if (res.data.code === 401) {
+          await this.$router.push({path: this.$store.state.errorPagePath})
+          return;
         }
         if (res.data.code === 0) {
           await this.getFullTagList()
@@ -112,11 +116,15 @@ export default {
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.$blog.post(`/tag/${id}/delete`).then(({data: res}) => {
+            this.$blog.post(`/admin/tag/${id}/delete`).then(({data: res}) => {
               if (res.code === 0) {
                 this.$message.success(res.msg)
                 this.getFullTagList()
               } else {
+                if (res.code === 401) {
+                  this.$router.push({path: this.$store.state.errorPagePath})
+                  return;
+                }
                 this.$message.error(res.msg)
               }
             })

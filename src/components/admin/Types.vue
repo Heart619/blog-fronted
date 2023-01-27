@@ -115,12 +115,12 @@ export default {
                 this.type.pic_url = this.dialogImageUrl
               let res;
               if (this.type.id === null) {
-                res = await this.$blog.post(`/type/save`, {
+                res = await this.$blog.post(`/admin/type/save`, {
                   'name': that.type.name,
                   'picUrl': that.type.pic_url
                 })
               } else {
-                res = await this.$blog.post(`/type/update`, {
+                res = await this.$blog.post(`/admin/type/update`, {
                   'id': that.type.id,
                   'name': that.type.name,
                   'picUrl': that.type.pic_url
@@ -130,6 +130,10 @@ export default {
                     await this.getFullTypeList()
                     this.$message.success("添加成功")
                 } else {
+                    if (res.data.code === 401) {
+                      await this.$router.push({path: this.$store.state.errorPagePath})
+                      return;
+                    }
                     this.$message.error(res.data.msg)
                 }
               this.createTypeDialogFormVisible = false
@@ -144,11 +148,15 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
               }).then(() => {
-            this.$blog.post(`/type/${row.id}/delete`).then(({data: res}) => {
+            this.$blog.post(`/admin/type/${row.id}/delete`).then(({data: res}) => {
               if (res.code === 0) {
                 this.$message.success(res.msg)
                 this.getFullTypeList()
               } else {
+                if (res.code === 401) {
+                  this.$router.push({path: this.$store.state.errorPagePath})
+                  return;
+                }
                 this.$message.error(res.msg)
               }
             })

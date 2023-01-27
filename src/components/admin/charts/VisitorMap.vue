@@ -105,7 +105,7 @@ export default {
       this.chartInstance.setOption(initOption)
     },
     async getData() {
-      const {data: res} = await this.$blog.get('/user/getUserAreaList');
+      const {data: res} = await this.$blog.get('/admin/user/getUserAreaList');
       if (res.code === 0) {
         let list = {}
         res.data.forEach((item) => {
@@ -123,6 +123,10 @@ export default {
         },300)
 
       } else {
+        if (res.code === 401) {
+          await this.$router.push({path: this.$store.state.errorPagePath})
+          return;
+        }
         this.$message.error('获取用户数据错误!')
       }
     },

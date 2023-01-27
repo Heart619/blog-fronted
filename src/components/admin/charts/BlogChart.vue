@@ -124,7 +124,11 @@ export default {
             this.chartInstance.setOption(initOption)
         },
         async getViewsData() {
-            const {data: res} = await this.$blog.get('/blog/getViewCountByMonth')
+            const {data: res} = await this.$blog.get('/admin/blog/getViewCountByMonth')
+            if (res.code === 401) {
+              await this.$router.push({path: this.$store.state.errorPagePath})
+              return;
+            }
             let list = []
             res.data.forEach((item) => {
                 let ls = item.split(',')
@@ -134,7 +138,11 @@ export default {
             this.updateChart()
         },
         async getBlogData() {
-            const {data: res} = await this.$blog.get('/blog/getBlogCountByMonth')
+            const {data: res} = await this.$blog.get('/admin/blog/getBlogCountByMonth')
+            if (res.code === 401) {
+              await this.$router.push({path: this.$store.state.errorPagePath})
+              return;
+            }
             let list = []
             res.data.forEach((item) => {
                 let ls = item.split(',')
@@ -144,7 +152,11 @@ export default {
             this.updateChart()
         },
         async getAppreciateCountByMonth() {
-            const {data: res} = await this.$blog.get('/blog/getAppreciateCountByMonth')
+            const {data: res} = await this.$blog.get('/admin/blog/getAppreciateCountByMonth')
+            if (res.code === 401) {
+              await this.$router.push({path: this.$store.state.errorPagePath})
+              return;
+            }
             let list = []
             res.data.forEach((item) => {
                 let ls = item.split(',')
@@ -155,7 +167,11 @@ export default {
             this.updateChart()
         },
         async getCommentCountByMonth() {
-            const {data: res} = await this.$blog.get('/comment/getCommentCountByMonth')
+            const {data: res} = await this.$blog.get('/admin/comment/getCommentCountByMonth')
+            if (res.code === 401) {
+              await this.$router.push({path: this.$store.state.errorPagePath})
+              return;
+            }
             let list = []
             res.data.forEach((item) => {
                 let ls = item.split(',')

@@ -183,12 +183,16 @@ export default {
       this.project.url = this.publishForm.url
       this.project.techs = this.publishForm.techs
       this.project.type = this.publishForm.type
-      const {data: res} = await this.$blog.post('/project/save', this.project)
+      const {data: res} = await this.$blog.post('/admin/project/save', this.project)
       if (res.code === 0) {
         this.$message.success('项目发布成功！')
         await this.getProjectList();
         this.activeName = 'first'
       } else {
+        if (res.code === 401) {
+          await this.$router.push({path: this.$store.state.errorPagePath})
+          return;
+        }
         return this.$message.error('项目发布失败！')
       }
     },
@@ -223,20 +227,28 @@ export default {
       if (confirmResult !== 'confirm') {
         return this.$message.info('已取消删除')
       }
-      const {data: res} = await this.$blog.post(`/project/${id}/delete`)
+      const {data: res} = await this.$blog.post(`/admin/project/${id}/delete`)
       if (res.code === 0) {
         await this.getProjectList()
         return this.$message.success('项目删除成功！')
       } else {
+        if (res.code === 401) {
+          await this.$router.push({path: this.$store.state.errorPagePath})
+          return;
+        }
         return this.$message.error('项目删除失败！')
       }
     },
     // 更新项目
     async updateProject(row) {
-      const {data: res} = await this.$blog.post('/project/update', row)
+      const {data: res} = await this.$blog.post('/admin/project/update', row)
       if (res.code === 0) {
         return this.$message.success('项目更新成功！')
       } else {
+        if (res.code === 401) {
+          await this.$router.push({path: this.$store.state.errorPagePath})
+          return;
+        }
         return this.$message.error('项目更新失败！')
       }
     }

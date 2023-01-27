@@ -35,7 +35,7 @@ export default {
     },
     methods: {
         async getCommentList() {
-            const {data: res} = await this.$blog.get('/comment//new/comments')
+            const {data: res} = await this.$blog.get('/comment/new/comments')
             this.commentlist = res.data
         },
     }

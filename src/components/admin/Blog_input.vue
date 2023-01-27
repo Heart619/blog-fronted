@@ -122,7 +122,11 @@ export default {
       async imgAdd(pos, $file) {
         let formdata = new FormData();
         formdata.append('file', $file);
-        const {data: res} = await this.$blog.post('/pictures/upload', formdata)
+        const {data: res} = await this.$blog.post('/admin/pictures/upload', formdata)
+        if (res.code === 401) {
+          await this.$router.push({path: this.$store.state.errorPagePath})
+          return;
+        }
         if (res.code === 0) {
           this.$refs.md.$img2Url(pos, res.data)
         }
@@ -131,10 +135,10 @@ export default {
       async imgDel(pos) {
         console.log(pos)
         // console.log(pos[0])
-        let len = pos[0].split('/').length
-        let filename = pos[0].split('/')[len - 1]
-        // console.log(filename)
-        const {data: res} = await this.$picture.get(`/delete/${filename}`)
+        // let len = pos[0].split('/').length
+        // let filename = pos[0].split('/')[len - 1]
+        // // console.log(filename)
+        // const {data: res} = await this.$picture.get(`/delete/${filename}`)
       },
         // 获取博客类型列表
         async getTypeList() {
@@ -148,13 +152,17 @@ export default {
         },
         async submit() {
             if (this.blog.id !== null){
-                const {data: res} = await this.$blog.post('/blog/update', this.blog)
+                const {data: res} = await this.$blog.post('/admin/blog/update', this.blog);
                 // console.log(res)
                 if (res.code === 0) {
                     this.publishDialogFormVisible = false
                     this.$router.go(-1);
                     return this.$message.success('修改博客成功！')
                 } else {
+                    if (res.code === 401) {
+                      await this.$router.push({path: this.$store.state.errorPagePath})
+                      return;
+                    }
                     this.publishDialogFormVisible = false
                     return this.$message.error('修改博客失败！')
                 }
@@ -177,13 +185,17 @@ export default {
                 this.blog.userId = JSON.parse(window.sessionStorage.getItem('user')).id;
                 this.blog.typeId = this.blog.type.id
                 this.blog.type = undefined;
-                const {data: res} = await this.$blog.post('/blog/save', this.blog)
+                const {data: res} = await this.$blog.post('/admin/blog/save', this.blog);
                 // console.log(res)
                 if (res.code === 0) {
                     this.publishDialogFormVisible = false
-                    await this.$router.push({path: '/admin/blogs', query: {}})
+                    await this.$router.push({path: '/admin/blogs'})
                     return this.$message.success('发布博客成功！')
                 } else {
+                    if (res.code === 401) {
+                      await this.$router.push({path: this.$store.state.errorPagePath})
+                      return;
+                    }
                     this.publishDialogFormVisible = false
                     return this.$message.error('发布博客失败！')
                 }

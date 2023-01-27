@@ -103,10 +103,14 @@ export default {
     },
     async submitImg(url) {
       if (url === ' ') return;
-      await this.$blog.post('/pictures/saveImg', {
+      await this.$blog.post('/admin/pictures/saveImg', {
           'image': url,
           'type': 2
       }).then(({data: res}) => {
+        if (res.code === 401) {
+          this.$router.push({path: this.$store.state.errorPagePath})
+          return;
+        }
         this.pictureList.push({
           'id': res.data,
           'image': url,
@@ -115,8 +119,11 @@ export default {
       })
     },
     async getPicList() {
-      const {data: res} = await this.$blog.get('/pictures/getWallImg')
-      console.log(res.data)
+      const {data: res} = await this.$blog.get('/admin/pictures/getWallImg')
+      if (res.code === 401) {
+        await this.$router.push({path: this.$store.state.errorPagePath})
+        return;
+      }
       this.pictureList = res.data
       for (let i = 0; i < this.pictureList.length; ++i) {
         this.urlList.push(this.$store.state.oss + this.pictureList[i].image);
@@ -135,10 +142,14 @@ export default {
       if (confirmResult !== 'confirm') {
         return this.$message.info('已取消删除')
       }
-      this.$blog.post(`/pictures/delete`, {
+      this.$blog.post(`/admin/pictures/delete`, {
         id,
         'image': key
-      }).then(res => {
+      }).then(({data: res}) => {
+        if (res.code === 401) {
+          this.$router.push({path: this.$store.state.errorPagePath})
+          return;
+        }
         var temp = [];
         for (let i = 0; i < this.pictureList.length; ++i)
           if (this.pictureList[i].id !== id) temp.push(this.pictureList[i]);

@@ -101,7 +101,11 @@ export default {
     async imgAdd(pos, $file) {
       let formdata = new FormData();
       formdata.append('file', $file);
-      const {data: res} = await this.$blog.post('/pictures/upload', formdata)
+      const {data: res} = await this.$blog.post('/admin/pictures/upload', formdata);
+      if (res.code === 401) {
+        await this.$router.push({path: this.$store.state.errorPagePath})
+        return;
+      }
       if (res.code === 0) {
         this.$refs.md.$img2Url(pos, res.data)
       }
@@ -110,10 +114,10 @@ export default {
     async imgDel(pos) {
       console.log(pos)
       // console.log(pos[0])
-      let len = pos[0].split('/').length
-      let filename = pos[0].split('/')[len - 1]
-      // console.log(filename)
-      const {data: res} = await this.$picture.get(`/essay/delete/${filename}`)
+      // let len = pos[0].split('/').length
+      // let filename = pos[0].split('/')[len - 1]
+      // // console.log(filename)
+      // const {data: res} = await this.$picture.get(`/essay/delete/${filename}`)
     },
     // 获取随笔列表
     async getEssayList() {
@@ -144,13 +148,17 @@ export default {
       this.essay.avatar = this.$store.state.userInfo.avatar
       this.essay.author = this.$store.state.userInfo.id
       this.essay.praise = 0
-      const {data: res} = await this.$blog.post('/essay/save', this.essay)
+      const {data: res} = await this.$blog.post('/admin/essay/save', this.essay)
       if (res.code === 0) {
         this.publishDialogFormVisible = false
         await this.getEssayList();
         this.activeName = 'first'
         return this.$message.success('发布随笔成功！')
       } else {
+        if (res.code === 401) {
+          await this.$router.push({path: this.$store.state.errorPagePath})
+          return;
+        }
         this.publishDialogFormVisible = false
         return this.$message.error('发布随笔失败！')
       }
@@ -176,11 +184,15 @@ export default {
       if (confirmResult !== 'confirm') {
         return this.$message.info('已取消删除')
       }
-      const {data: res} = await this.$blog.get(`/essay/${id}/delete`)
+      const {data: res} = await this.$blog.get(`/admin/essay/${id}/delete`)
       if (res.code === 0) {
         await this.getEssayList()
         return this.$message.success('随笔删除成功！')
       } else {
+        if (res.code === 401) {
+          await this.$router.push({path: this.$store.state.errorPagePath})
+          return;
+        }
         return this.$message.error('随笔删除失败！')
       }
     },
