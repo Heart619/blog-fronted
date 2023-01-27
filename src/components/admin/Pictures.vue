@@ -6,7 +6,8 @@
         <div v-for="p in pictureList" class="waterfall_item" :key="p.id">
           <el-card class="imgs" >
             <div style="width: 100%; height: 100%">
-              <img class="images" v-if="p.image" :lazy-src="$store.state.oss + p.image" @click="showImg(p.image)"/>
+<!--              <img class="images" v-if="p.image" :lazy-src="$store.state.oss + p.image" @click="showImg(p.image)"/>-->
+              <el-image class="images" v-if="p.image" :src="$store.state.oss + p.image" :preview-src-list="urlList"></el-image>
               <span>{{p.image}}</span>
               <el-button size="mini" type="danger" circle @click="deletePic(p.id, p.image)">
                 <i class="el-icon-delete"></i>
@@ -35,6 +36,7 @@ export default {
   },
   data() {
     return {
+      urlList: [],
       pictureList: [],
       renderList:[],
       waterfall_box_width: 0,
@@ -114,7 +116,11 @@ export default {
     },
     async getPicList() {
       const {data: res} = await this.$blog.get('/pictures/getWallImg')
+      console.log(res.data)
       this.pictureList = res.data
+      for (let i = 0; i < this.pictureList.length; ++i) {
+        this.urlList.push(this.$store.state.oss + this.pictureList[i].image);
+      }
     },
     async deletePic(id, key) {
       const confirmResult = await this.$confirm(

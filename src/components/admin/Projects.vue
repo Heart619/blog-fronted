@@ -7,46 +7,13 @@
     </el-breadcrumb>
     <el-card shadow="hover">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane label="发布项目" name="first">
-          <el-form label-position="left" label-width="80px" style="text-align: left" ref="publishFormRef"
-                   :model="publishForm"
-                   class="publish_form">
-            <el-form-item label="项目名称" prop="title">
-              <el-input v-model="publishForm.title"></el-input>
-            </el-form-item>
-            <el-form-item label="项目类型" prop="type">
-              <el-select v-model="publishForm.type">
-                <el-option v-for="item in types"
-                           :value="item.id"
-                           :label="item.name"
-                           :key="item.id">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="项目描述" prop="content">
-              <el-input v-model="publishForm.content" type="textarea" placeholder="请输入内容"></el-input>
-            </el-form-item>
-            <el-form-item label="项目图片">
-              <singleUpload v-model="dialogImageUrl"></singleUpload>
-            </el-form-item>
-            <el-form-item label="技术栈" prop="techs">
-              <el-input v-model="publishForm.techs"></el-input>
-            </el-form-item>
-            <el-form-item label="项目地址" prop="url">
-              <el-input v-model="publishForm.url"></el-input>
-            </el-form-item>
-            <el-form-item style="text-align: center">
-              <el-button type="primary" @click="publishProject">发布</el-button>
-            </el-form-item>
-          </el-form>
-        </el-tab-pane>
-        <el-tab-pane label="项目列表" name="second">
+        <el-tab-pane label="项目列表" name="first">
           <el-table :data="projectList" border stripe>
             <el-table-column type="index"></el-table-column>
             <el-table-column label="项目名称" prop="title"></el-table-column>
             <el-table-column label="项目图片" prop="pic_url">
               <template slot-scope="scope">
-                <el-image :src="$store.state.oss + scope.row.pic_url" style="width: 100%;max-height: 150px"></el-image>
+                <el-image :src="$store.state.oss + scope.row.picUrl" style="width: 100%;max-height: 150px"></el-image>
               </template>
             </el-table-column>
             <el-table-column label="项目类型" prop="type">
@@ -79,15 +46,48 @@
               <template slot-scope="scope">
                 <!--            删除按钮-->
                 <el-button
-                        type="danger"
-                        icon="el-icon-delete"
-                        size="mini"
-                        circle
-                        @click="removeProjectById(scope.row.id)"
+                    type="danger"
+                    icon="el-icon-delete"
+                    size="mini"
+                    circle
+                    @click="removeProjectById(scope.row.id)"
                 ></el-button>
               </template>
             </el-table-column>
           </el-table>
+        </el-tab-pane>
+        <el-tab-pane label="发布项目" name="second">
+          <el-form label-position="left" label-width="80px" style="text-align: left" ref="publishFormRef"
+                   :model="publishForm"
+                   class="publish_form">
+            <el-form-item label="项目名称" prop="title">
+              <el-input v-model="publishForm.title"></el-input>
+            </el-form-item>
+            <el-form-item label="项目类型" prop="type">
+              <el-select v-model="publishForm.type">
+                <el-option v-for="item in types"
+                           :value="item.id"
+                           :label="item.name"
+                           :key="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="项目描述" prop="content">
+              <el-input v-model="publishForm.content" type="textarea" placeholder="请输入内容"></el-input>
+            </el-form-item>
+            <el-form-item label="项目图片">
+              <singleUpload v-model="dialogImageUrl"></singleUpload>
+            </el-form-item>
+            <el-form-item label="技术栈" prop="techs">
+              <el-input v-model="publishForm.techs"></el-input>
+            </el-form-item>
+            <el-form-item label="项目地址" prop="url">
+              <el-input v-model="publishForm.url"></el-input>
+            </el-form-item>
+            <el-form-item style="text-align: center">
+              <el-button type="primary" @click="publishProject">发布</el-button>
+            </el-form-item>
+          </el-form>
         </el-tab-pane>
       </el-tabs>
     </el-card>
@@ -116,7 +116,7 @@ export default {
       dialogImageUrl: '',
       publishForm: {},
       dialogVisible: false,
-      activeName: 'second',
+      activeName: 'first',
       types: [
         {id: 0, name: '完整项目'},
         {id: 1, name: '小练习'}
@@ -152,7 +152,7 @@ export default {
     },
     // 点击tab时的事件
     handleClick(tab, event) {
-      if (tab.name === 'second') {
+      if (tab.name === 'first') {
         this.getProjectList()
       }
     },
@@ -183,22 +183,22 @@ export default {
       this.project.url = this.publishForm.url
       this.project.techs = this.publishForm.techs
       this.project.type = this.publishForm.type
-      const {data: res} = await this.$blog.post('/admin/project', {
-        project: this.project
-      })
-      if (res.code === 200) {
-        return this.$message.success('项目发布成功！')
+      const {data: res} = await this.$blog.post('/project/save', this.project)
+      if (res.code === 0) {
+        this.$message.success('项目发布成功！')
+        await this.getProjectList();
+        this.activeName = 'first'
       } else {
         return this.$message.error('项目发布失败！')
       }
     },
     // 获取项目列表
     async getProjectList() {
-      const {data: res} = await this.$blog.get('/admin/projects')
-      if (res.code !== 200) {
+      const {data: res} = await this.$blog.get('/project/list')
+      if (res.code !== 0) {
         return this.$message.error('获取项目列表失败！')
       }
-      res.data.forEach(item => {
+      res.page.list.forEach(item => {
         // 控制文本框的显示与隐藏
         item.inputVisible = false
         // 文本框中输入的值
@@ -206,7 +206,7 @@ export default {
         // 控制网址是否可编辑
         item.inputUrlVisiable = false
       })
-      this.projectList = res.data
+      this.projectList = res.page.list
     },
     // 删除项目
     async removeProjectById(id) {
@@ -223,8 +223,8 @@ export default {
       if (confirmResult !== 'confirm') {
         return this.$message.info('已取消删除')
       }
-      const {data: res} = await this.$blog.get(`/admin/project/${id}/delete`)
-      if (res.code === 200) {
+      const {data: res} = await this.$blog.post(`/project/${id}/delete`)
+      if (res.code === 0) {
         await this.getProjectList()
         return this.$message.success('项目删除成功！')
       } else {
@@ -233,10 +233,8 @@ export default {
     },
     // 更新项目
     async updateProject(row) {
-      const {data: res} = await this.$blog.post('/admin/project', {
-        project: row
-      })
-      if (res.code === 200) {
+      const {data: res} = await this.$blog.post('/project/update', row)
+      if (res.code === 0) {
         return this.$message.success('项目更新成功！')
       } else {
         return this.$message.error('项目更新失败！')

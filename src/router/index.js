@@ -64,36 +64,33 @@ const routes = [
             // next 是一个函数，表示放行
             // next() 放行  next('login') 强制跳转
             const userInfo = JSON.parse(window.sessionStorage.getItem('user'))
-            // console.log(userInfo)
             if (!userInfo) return next('/error')
             else {
-                const type = userInfo.type
-                // console.log(type)
-                if (type === 0) return next('/error')
+                if (userInfo.type === 0) return next('/error')
                 next()
             }
             next()
         },
         redirect: '/admin/index',
         children: [
-            {path: '/admin/index', component: AdminIndex},
-            {path: '/admin/blogs', component: Blogs},
-            {path: '/admin/blog-input', component: Blog_input},
-            {path: '/admin/administrator', component: Administrator},
-            {path: '/admin/types', component: Types},
-            {path: '/admin/tags', component: Tags},
-            {path: '/admin/comments', component: Comments},
-            {path: '/admin/essays', component: Essays},
-            {path: '/admin/projects', component: Projects},
-            {path: '/admin/users', component: Users},
-            {path: '/admin/pictures', component: Pictures}
+            {path: '/admin/index', component: AdminIndex, name: false},
+            {path: '/admin/blogs', component: Blogs, name: true},
+            {path: '/admin/blog-input', component: Blog_input, name: true},
+            {path: '/admin/administrator', component: Administrator, name: true},
+            {path: '/admin/types', component: Types, name: false},
+            {path: '/admin/tags', component: Tags, name: false},
+            {path: '/admin/comments', component: Comments, name: false},
+            {path: '/admin/essays', component: Essays, name: true},
+            {path: '/admin/projects', component: Projects, name: false},
+            {path: '/admin/users', component: Users, name: false},
+            {path: '/admin/pictures', component: Pictures, name: true}
         ]
     }
 ]
 
 const router = new VueRouter({
     routes,
-    mode: 'history'
+    mode: 'hash'
 })
 
 

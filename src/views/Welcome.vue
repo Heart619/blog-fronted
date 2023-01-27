@@ -4,7 +4,7 @@
         <el-main>
             <router-view></router-view>
         </el-main>
-        <Footer v-show="pageName!=='about'"></Footer>
+        <Footer v-show=" pageName!=='about' "></Footer>
         <transition name="fade">
             <p id="back-top" v-if="backTopFlag" @click="scollTo(0)">
                 <span><i class="el-icon-arrow-up"></i></span>

@@ -75,6 +75,13 @@ export default {
             screenWidth : document.documentElement.clientWidth
         }
     },
+    watch: {
+      $route(to, from) {
+        if (to.name === false && this.$store.state.userInfo.type !== 2) {
+          this.$router.push({path: from.path})
+        }
+      }
+    },
     created() {
         window.addEventListener('resize', this.screenAdapter)
         this.activePath = window.sessionStorage.getItem('activePath')

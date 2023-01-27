@@ -142,7 +142,7 @@ export default {
       this.essay.content = this.publishForm.content
       this.essay.color = this.publishForm.color
       this.essay.avatar = this.$store.state.userInfo.avatar
-      this.essay.author = this.$store.state.userInfo.nickname
+      this.essay.author = this.$store.state.userInfo.id
       this.essay.praise = 0
       const {data: res} = await this.$blog.post('/essay/save', this.essay)
       if (res.code === 0) {

@@ -6,10 +6,10 @@
       </el-col>
       <!--      <el-col :span="24">-->
       <div class="animate__animated animate__fadeInLeft"
-           v-for="(project) in projectList" :key="project.id">
+           v-for="project in projectList" :key="project.id">
         <a :href="project.url" style="text-decoration: none" target="_blank">
           <el-card class="project">
-            <el-image class="image" lazy :src="$store.state.oss + project.pic_url"></el-image>
+            <el-image class="image" lazy :src="$store.state.oss + project.picUrl"></el-image>
             <div class="pro-info">
               <h3>{{project.title}}</h3>
               <p class="info">{{project.content}}</p>
@@ -58,12 +58,12 @@ export default {
   },
   methods: {
     async getProjectList() {
-      const {data: res} = await this.$blog.get('/projects')
-      if (res.code === 200) {
-        this.demoList = res.data.filter(item => {
+      const {data: res} = await this.$blog.get('project/list')
+      if (res.code === 0) {
+        this.demoList = res.page.list.filter(item => {
           return item.type === 1
         })
-        this.projectList = res.data.filter(item => {
+        this.projectList = res.page.list.filter(item => {
           return item.type === 0
         })
       }

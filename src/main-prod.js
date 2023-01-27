@@ -2,7 +2,6 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-// import Element from 'element-ui'
 import mavonEditor from 'mavon-editor'
 import marked from 'marked'
 import axios from 'axios'
@@ -29,11 +28,11 @@ Vue.prototype.$jsonp = VueJsonp
 
 
 const blog = axios.create({ // 博客后台api地址
-  baseURL: 'http://hikari.top:8090/'
+  baseURL: '/api',
 })
 
 const picture = axios.create({ // 图片服务器api地址
-  baseURL: 'http://roxuynt15.hd-bkt.clouddn.com'
+  baseURL: '/api',
 })
 
 blog.interceptors.request.use(config => {

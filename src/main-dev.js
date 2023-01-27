@@ -30,13 +30,11 @@ Vue.prototype.$jsonp = VueJsonp
 
 
 const blog = axios.create({ // 博客后台api地址
-    baseURL: 'http://127.0.0.1:8090/',
-    withCredentials: true // 允许跨域携带cookie
+    baseURL: '/api',
 })
 
 const picture = axios.create({ // 图片服务器api地址
-    baseURL: 'http://roxuynt15.hd-bkt.clouddn.com',
-    withCredentials: true
+    baseURL: '/api',
 })
 
 blog.interceptors.request.use(config => {
