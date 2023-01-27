@@ -23,7 +23,7 @@
 
         <el-card v-if="messageList.length>0" class="animate__animated animate__fadeInLeft">
             <ul style="padding: 0" class="comment-list">
-                <li class="comment" v-for="ms in messageList" :key="ms.id">
+                <li class="comment" v-for="(ms, index) in messageList" :key="ms.id">
                     <el-avatar v-if="ms.avatar!==''" :src="$store.state.oss + ms.avatar" ></el-avatar>
                     <el-avatar v-else  icon="el-icon-user-solid"></el-avatar>
                     <div class="content">
@@ -37,8 +37,9 @@
                     </div>
                     <!--                    {{cmt}}-->
 <!--                  -->
-                  <el-link v-if="userInfo !== null && userInfo.id === ms.userId" type="danger" @click="delMsg(ms.id)">删除</el-link>
+                  <el-link v-if="userInfo !== null && userInfo.id === ms.userId" type="danger" @click="delMsg(ms.id, index)">删除</el-link>
                 </li>
+              <div :v-loading="loading" element-loading-text="正在加载"></div>
             </ul>
         </el-card>
     </el-container>
@@ -66,6 +67,10 @@ export default {
                     {min: 0, max: 100, message: "留言内容不超过100字！"}
                 ]
             },
+            page: 1,
+            limit: 10,
+            totalPage: 0,
+            loading: false
         }
     },
     created() {
@@ -77,7 +82,24 @@ export default {
             'administrator'
         ])
     },
+    beforeDestroy() {
+      window.removeEventListener('scroll', this.lazyLoading);
+    },
+    mounted() {
+      window.addEventListener('scroll', this.lazyLoading); // 滚动到底部，再加载的处理事件
+    },
     methods: {
+        lazyLoading () { // 滚动到底部，再加载的处理事件\
+          const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+          const clientHeight = document.documentElement.clientHeight
+          const scrollHeight = document.documentElement.scrollHeight
+          if (scrollTop + clientHeight >= scrollHeight && !this.loading) {
+            // 滚动到底部，逻辑代码
+            ++this.page;
+            if (this.page > this.totalPage) return;
+            this.getMessageList();
+          }
+        },
         // 留言发表
         publish(){
             this.$refs.messageFormRef.validate(  async valid => {
@@ -95,7 +117,7 @@ export default {
                 const {data: res} = await this.$blog.post('/message/addMessage', this.message)
               // console.log(this.userInfo)
                 if (res.code === 0) {
-                  await this.getMessageList()
+                  this.messageList.unshift(res.data);
                   this.$message({message: "留言发表成功", type: 'success', offset: 80});
                   this.messageForm.content = '';
                 } else {
@@ -114,18 +136,18 @@ export default {
 
         // 获取留言列表
         async getMessageList() {
-            const {data: res} = await this.$blog.get('/message/messages')
-            this.messageList = res.data.sort((a, b) => {
-                return b.createTime.localeCompare(a.createTime)
-            })
+            this.loading = true;
+            const {data: res} = await this.$blog.get(`/message/list?page=${this.page}&limit=${this.limit}`)
+            this.loading = false
+            this.totalPage = res.page.totalPage
+            this.messageList = [...this.messageList, ...res.page.list]
         },
         //删除留言
-        async delMsg(id) {
+        async delMsg(id, index) {
           const {data: res} = await this.$blog.post('/message/messages/del/' + id);
           if (res.code === 0) {
-            this.messageList = res.data;
+            this.messageList.splice(index, 1);
           }
-          // console.log(res)
         }
     },
 }

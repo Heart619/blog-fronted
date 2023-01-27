@@ -13,7 +13,7 @@
 
 <script>
 export default {
-    props:['id','blogId', 'blogAuthor'],
+    props:['id', 'blogId', 'comment', 'blogAuthor'],
     data(){
         return {
             replyForm: {
@@ -50,7 +50,9 @@ export default {
                         nickname: this.userInfo.nickname,
                     })
                     if (res.code === 0) {
-                        this.$emit('newCmt',res.data)
+                        this.comment.children.unshift(res.data);
+                        // res.data.parentComment = this.comment
+                        this.$emit('newCmt')
                     } else {
                         this.$message({message: "评论发表失败！", type: 'error', offset: 80});
                     }

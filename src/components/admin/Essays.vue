@@ -10,19 +10,24 @@
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="随笔管理" name="first">
           <el-table :data="essayList" border stripe>
-            <el-table-column type="index"></el-table-column>
-            <el-table-column label="随笔标题" prop="title"></el-table-column>
-            <el-table-column label="边框颜色" prop="color">
+            <el-table-column type="index" align="center"></el-table-column>
+            <el-table-column label="随笔标题" prop="title" width="700px"></el-table-column>
+            <el-table-column v-if="$store.state.userInfo.type === 2" label="作者" prop="color" width="216px" align="center">
+              <template slot-scope="scope">
+                <el-avatar :src="$store.state.oss + scope.row.avatar"></el-avatar>{{scope.row.nickName}}
+              </template>
+            </el-table-column>
+            <el-table-column label="边框颜色" prop="color" width="80px" align="center">
               <template slot-scope="scope">
                 <el-tag :color="scope.row.color" class="essay-color"></el-tag>
               </template>
             </el-table-column>
-            <el-table-column label="发布时间" prop="createTime">
+            <el-table-column label="发布时间" prop="createTime" width="120px" align="center">
               <template slot-scope="scope">
                 {{scope.row.createTime | dataFormat }}
               </template>
             </el-table-column>
-            <el-table-column label="操作">
+            <el-table-column label="操作" width="150px" align="center">
               <template slot-scope="scope">
                 <!--            修改按钮-->
                 <el-button
@@ -138,6 +143,15 @@ export default {
     },
     // 发布随笔
     async publishAssay() {
+      if (this.publishForm.content === undefined || this.publishForm.content === null || this.publishForm.content === '') {
+        this.$message.warning("随笔内容不能为空")
+        return;
+      }
+      if (this.publishForm.title === undefined || this.publishForm.title === null || this.publishForm.title === '') {
+        this.$message.warning("标题不能为空")
+        return;
+      }
+
       if (this.publishForm.id !== null) {
         this.essay.id = this.publishForm.id
       }

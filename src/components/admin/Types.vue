@@ -15,8 +15,8 @@
                     </template>
                 </el-table-column>
                 <el-table-column label="分类名称" prop="name"></el-table-column>
-                <el-table-column label="博客数量" prop="blogNum"></el-table-column>
-                <el-table-column label="操作">
+                <el-table-column label="博客数量" prop="blogNum" align="center"></el-table-column>
+                <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <!--            修改按钮-->
                         <el-button

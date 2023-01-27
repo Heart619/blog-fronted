@@ -28,7 +28,7 @@
                 <el-input size="small" v-model="scope.row.url" @blur="updateProject(scope.row)"></el-input>
               </template>
             </el-table-column>
-            <el-table-column label="项目技术" prop="techs">
+            <el-table-column label="技术栈" prop="techs">
               <template v-if="scope.row.techs!==null" slot-scope="scope">
                 <el-tag v-for="(tag,i) in scope.row.techs.split(',')" style="margin: 3px" size="small" closable
                         @close="handleClose(i,scope.row)">{{tag}}
@@ -138,7 +138,12 @@ export default {
     },
     // 确认输入
     handleInputConfirm(row) {
-      row.techs += ','+row.inputValue
+      if (row.inputValue.trim().length === 0) {
+        row.inputValue = ''
+        row.inputVisible = false
+        return;
+      }
+      row.techs += ',' + row.inputValue
       row.inputValue = ''
       row.inputVisible = false
       this.updateProject(row)
@@ -171,7 +176,6 @@ export default {
     },
     // 清空状态
     backPage() {
-      this.$refs.upload.clearFiles()
       this.blog.firstPicture = ''
       this.$refs.publishFormRef.resetFields()
     },

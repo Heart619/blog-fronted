@@ -11,31 +11,31 @@
             </el-row>
             <el-table :data="userList" border>
                 <el-table-column type="index"></el-table-column>
-                <el-table-column label="头像" prop="avatar" min-width="60px">
+                <el-table-column label="头像" prop="avatar" min-width="60px" align="center">
                     <template slot-scope="scope">
                         <el-avatar :src="$store.state.oss + scope.row.avatar"></el-avatar>
                     </template>
                 </el-table-column>
-                <el-table-column label="昵称" prop="nickname"></el-table-column>
-                <el-table-column label="账号" prop="username"></el-table-column>
-                <el-table-column label="邮箱" prop="email" min-width="100px"></el-table-column>
-                <el-table-column label="注册时间" prop="createTime" min-width="100px">
+                <el-table-column label="昵称" prop="nickname" align="center"></el-table-column>
+                <el-table-column label="账号" prop="username" align="center"></el-table-column>
+                <el-table-column label="邮箱" prop="email" min-width="100px" ></el-table-column>
+                <el-table-column label="注册时间" prop="createTime" min-width="100px" align="center">
                     <template slot-scope="scope">{{scope.row.createTime | dataFormat }}</template>
                 </el-table-column>
-                <el-table-column label="最近登录" prop="loginTime">
+                <el-table-column label="最近登录" prop="loginTime" align="center">
                     <template slot-scope="scope">{{scope.row.lastLoginTime===null?scope.row.createTime:scope.row.lastLoginTime | dataFormat3 }}</template>
                 </el-table-column>
-                <el-table-column label="地址">
+                <el-table-column label="地址" align="center">
                     <template slot-scope="scope">{{scope.row.loginProvince +' '+ scope.row.loginCity }}</template>
                 </el-table-column>
-                <el-table-column label="管理员" min-width="70px">
+                <el-table-column label="管理员" min-width="70px" align="center">
                     <template slot-scope="scope">
-                        <el-switch active-value="1" inactive-value="0" v-model="scope.row.type" :disabled="scope.row.id !== 2"
-                                   @change="userStateChanged(scope.row)">
+                      <el-tag v-if="scope.row.type === 2" type="success">超级管理员</el-tag>
+                        <el-switch v-else :active-value="1" :inactive-value="0" v-model="scope.row.type" @change="userStateChanged(scope.row)">
                         </el-switch>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="60px">
+                <el-table-column label="操作" width="60px" align="center">
                     <template slot-scope="scope">
                         <el-button size="mini" circle type="danger" icon="el-icon-delete"
                                    @click="deleteUser(scope.row.id)"></el-button>

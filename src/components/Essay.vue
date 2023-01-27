@@ -2,7 +2,7 @@
   <div>
     <el-empty v-if="essayList.length === 0" description="当前暂无随笔"></el-empty>
     <el-container v-if="essayList.length !== 0">
-      <el-timeline class="animate__animated animate__fadeInLeft">
+      <el-timeline v-show="true" class="animate__animated animate__fadeInLeft">
         <el-timeline-item :color="essay.borderColor" v-for="essay in essayList" :key="essay.id" :timestamp="essay.createTime | dataFormat" placement="top">
           <el-card style="letter-spacing: 1px;" :style="calcuteStyle(essay)">
             <h2 v-if="essay.title">{{essay.title}}</h2>
@@ -12,7 +12,8 @@
               {{ essay.nickName }}
             </p>
           </el-card>
-        </el-timeline-item>
+         </el-timeline-item>
+          <div :v-loading="loading" element-loading-text="正在加载"></div>
       </el-timeline>
     </el-container>
   </div>
@@ -22,26 +23,50 @@
 export default {
     data() {
         return {
-            essayList: []
+            essayList: [],
+            page: 1,
+            limit: 4,
+            totalPage: 0,
+            loading: false
         }
     },
     created() {
         this.getEssayList()
     },
+    beforeDestroy() {
+      window.removeEventListener('scroll', this.lazyLoading);
+    },
+    mounted() {
+      window.addEventListener('scroll', this.lazyLoading); // 滚动到底部，再加载的处理事件
+    },
     methods:{
+        lazyLoading () { // 滚动到底部，再加载的处理事件\
+          const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+          const clientHeight = document.documentElement.clientHeight
+          const scrollHeight = document.documentElement.scrollHeight
+
+          if (scrollTop + clientHeight >= scrollHeight && !this.loading) {
+            // 滚动到底部，逻辑代码
+            ++this.page;
+            if (this.page > this.totalPage) return;
+            this.getEssayList();
+          }
+        },
         async getEssayList(){
-            const {data: res} = await this.$blog.get('/essay/list')
+            this.loading = true;
+            const {data: res} = await this.$blog.get(`/essay/list?page=${this.page}&limit=${this.limit}`);
+            this.loading = false;
             if (res.code === 0){
-                this.essayList = res.page.list
-                // this.essayList = res.page.list.sort((a, b) => {
-                //     return b.createTime.localeCompare(a.createTime)
-                // })
-                this.essayList.forEach( (essay) => {
-                    essay.content = this.$marked(essay.content)
+                  let i = this.essayList.length;
+                  this.totalPage = res.page.totalPage
+                  this.essayList = [...this.essayList, ...res.page.list]
+                  for (; i < this.essayList.length; ++i) {
+                      let essay = this.essayList[i];
+                      this.essayList[i].cotent = essay.content = this.$marked(essay.content)
                     essay.borderColor = essay.color.split(",")[0]+','+essay.color.split(",")[1]+ ','+essay.color.split(",")[2]+')'
                     essay.contentColor = essay.color.split(",")[0]+','+essay.color.split(",")[1]+ ','+essay.color.split(",")[2]+',0.1)'
-                } )
-            }
+                  }
+              }
         },
         calcuteStyle(essay){
             return 'border: 3px solid '+essay.borderColor+'; background-color: rgba(255,255,255,0.9);box-shadow: 0 0 30px -10px '+essay.borderColor

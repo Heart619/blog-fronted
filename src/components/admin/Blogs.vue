@@ -44,12 +44,17 @@
                         </div>
                     </template>
                 </el-table-column>
-                <el-table-column label="标题" prop="title" width="426px">
+                <el-table-column label="标题" prop="title" width="300px">
                     <template slot-scope="scope">
                         <p @click="getBlogInfo(scope.row.id)" class="change-type">{{scope.row.title}}</p>
                     </template>
                 </el-table-column>
-                <el-table-column label="分类" prop="type.name" width="200px">
+                <el-table-column v-if="$store.state.userInfo.type === 2" label="作者" prop="title" width="156px" align="center">
+                  <template slot-scope="scope">
+                    <el-avatar :src="$store.state.oss + scope.row.userAvatar"></el-avatar>{{scope.row.userNickName}}
+                  </template>
+                </el-table-column>
+                <el-table-column label="分类" prop="type.name" width="170px" align="center">
                     <template slot-scope="scope">
                         <div @click="changeBlogType(scope.row)" class="change-type">{{scope.row.typeName}}
                             <i class="el-icon-edit"></i></div>
@@ -69,13 +74,13 @@
                         </el-button>
                     </template>
                 </el-table-column>
-                <el-table-column label="阅读量" prop="views" width="100px"></el-table-column>
-                <el-table-column label="更新时间" prop="updateTime" width="150px">
+                <el-table-column label="阅读量" prop="views" width="100px" align="center"></el-table-column>
+                <el-table-column label="更新时间" prop="updateTime" width="150px" align="center">
                     <template slot-scope="scope">
                         {{scope.row.updateTime | dataFormat }}
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="90px">
+                <el-table-column label="操作" width="90px" align="center">
                     <template slot-scope="scope">
                         <!--            修改按钮-->
                         <el-button
@@ -251,7 +256,7 @@ export default {
             const {data: res} = await this.$blog.post('/blog/list', {
                 title: this.queryInfo.query,
                 typeId: this.queryInfo.typeId,
-                curPage: this.pagenum,
+                page: this.pagenum,
                 limit: this.pagesize,
                 needTags: 'true',
                 userId: this.$store.state.userInfo.type === 2 ? undefined : this.$store.state.userInfo.id

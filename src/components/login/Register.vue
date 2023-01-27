@@ -19,7 +19,7 @@
             </el-form-item>
             <!--        头像-->
             <el-form-item prop="avatar" label="头像">
-              <singleUpload v-model="Form.avatar"></singleUpload>
+              <singleUpload v-model="dialogImageUrl"></singleUpload>
             </el-form-item>
             <el-form-item style="text-align: right">
                 <el-button @click="resetForm">取消</el-button>
