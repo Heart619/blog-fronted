@@ -144,7 +144,7 @@ export default {
         },
         //删除留言
         async delMsg(id, index) {
-          const {data: res} = await this.$blog.post('/message/messages/del/' + id);
+          const {data: res} = await this.$blog.post('/admin/message/messages/del/' + id);
           if (res.code === 0) {
             this.messageList.splice(index, 1);
           }
