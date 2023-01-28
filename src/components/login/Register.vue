@@ -68,18 +68,18 @@ export default {
                 username: [
                     // 必填，提示消息，鼠标焦点消失时触发
                     {required: true, message: "请输入用户名", trigger: "blur"},
-                    {min: 2, max: 10, message: "长度在2-10个字符之间"}
+                    {min: 2, max: 16, message: "长度在2-10个字符之间"}
                 ],
                 // 验证用户是否合法
                 nickname: [
                     // 必填，提示消息，鼠标焦点消失时触发
                     {required: true, message: "请输入昵称", trigger: "blur"},
-                    {min: 2, max: 10, message: "长度在2-10个字符之间"}
+                    {min: 2, max: 16, message: "长度在2-10个字符之间"}
                 ],
                 // 验证密码是否合法
                 password: [
                     {required: true, message: "请输入密码", trigger: "blur"},
-                    {min: 6, max: 10, message: "长度在 6 到 10 个字符", trigger: "blur"}
+                    {min: 6, max: 16, message: "长度在 6 到 10 个字符", trigger: "blur"}
                 ],
             },
             dialogImageUrl: ''
@@ -118,7 +118,7 @@ export default {
                 this.user.loginLat = local.result.location.lat
                 this.user.loginLng = local.result.location.lng
                 const {data: res} = await this.$blog.post('/user/register', this.user)
-                if (res.code !== 0) return this.$message.error("注册失败")
+                if (res.code !== 0) return this.$message.error(res.msg)
                 // console.log(res)
                 this.$refs.FormRef.resetFields()
                 this.$message({message: '注册成功', type: 'success', offset: 80});

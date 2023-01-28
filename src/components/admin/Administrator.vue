@@ -137,9 +137,9 @@ export default {
       if (res.code === 0) {
         window.sessionStorage.setItem("user", JSON.stringify(this.userFrom));
         this.$store.commit('getUserInfo')
-        return this.$message.success(res.message)
+        return this.$message.success(res.msg)
       } else {
-        return this.$message.error(res.message)
+        return this.$message.error(res.msg)
       }
     },
     setNewPwd() {

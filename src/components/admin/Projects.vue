@@ -96,7 +96,15 @@
               <singleUpload v-model="dialogImageUrl"></singleUpload>
             </el-form-item>
             <el-form-item label="技术栈" prop="techs">
-              <el-input v-model="publishForm.techs"></el-input>
+                <el-tag v-for="(tag, i) in stacks" style="margin: 3px" size="small" closable
+                        @close="handleRemoveStack(i)">{{ tag }}
+                </el-tag>
+                <el-input size="small" style="width: 100px;" class="input-new-tag" v-if="showStackInput"
+                          ref="saveInput" v-model="stackInputVal"
+                          @keyup.enter.native="handleInputStack()"
+                          @blur="handleInputStack()">
+                </el-input>
+                <el-button v-else size="mini" class="button-new-tag" @click="showAddInput()">+</el-button>
             </el-form-item>
             <el-form-item label="项目地址" prop="url">
               <el-input v-model="publishForm.url"></el-input>
@@ -144,6 +152,9 @@ export default {
       page: 1,
       limit: 4,
       totalCount: 0,
+      showStackInput: false,
+      stacks: [],
+      stackInputVal: ''
     }
   },
   mounted() {
@@ -159,6 +170,14 @@ export default {
     }
   },
   methods: {
+    showAddInput() {
+      this.showStackInput = true
+      //   让输入框自动获取焦点
+      // $nextTick方法的作用：当页面元素被重新渲染之后，才会至指定回调函数中的代码
+      this.$nextTick(_ => {
+        this.$refs.saveInput.$refs.input.focus()
+      })
+    },
     // 点击按钮,展示文本输入框
     showInput(row) {
       row.inputVisible = true
@@ -167,6 +186,16 @@ export default {
       this.$nextTick(_ => {
         this.$refs.saveInput.$refs.input.focus()
       })
+    },
+    handleInputStack() {
+      if (this.stackInputVal.trim().length === 0) {
+        this.stackInputVal = ''
+        this.showStackInput = false
+        return;
+      }
+      this.stacks.push(this.stackInputVal);
+      this.stackInputVal = ''
+      this.showStackInput = false
     },
     // 确认输入
     handleInputConfirm(row) {
@@ -179,6 +208,9 @@ export default {
       row.inputValue = ''
       row.inputVisible = false
       this.updateProject(row)
+    },
+    handleRemoveStack(idx) {
+      this.stacks.splice(idx, 1)
     },
     // 去掉技术
     handleClose(i, row) {
@@ -213,12 +245,12 @@ export default {
     },
     // 发布项目
     async publishProject() {
-      this.project.pic_url = this.dialogImageUrl
+      this.project.picUrl = this.dialogImageUrl
       this.project.title = this.publishForm.title
       this.project.content = this.publishForm.content
       this.project.url = this.publishForm.url
-      this.project.techs = this.publishForm.techs
       this.project.type = this.publishForm.type
+      this.project.techs = this.stacks.join(",")
       const {data: res} = await this.$blog.post('/admin/project/save', this.project)
       if (res.code === 0) {
         this.$message.success('项目发布成功！')

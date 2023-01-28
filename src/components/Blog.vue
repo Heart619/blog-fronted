@@ -44,26 +44,26 @@
           </div>
         </div>
       </div>
-      <div class="appreciate">
-        <el-popover
-            placement="bottom"
-            title=""
-            width="300"
-            trigger="hover"
-            content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
-          <div class="give-money">
-            <div class="give-money-item">
-              <el-image :src="wechart" title="微信支付"></el-image>
-              <p>微信</p>
-            </div>
-            <div class="give-money-item">
-              <el-image :src="alipay" title="支付宝支付"></el-image>
-              <p>支付宝</p>
-            </div>
-          </div>
-          <el-button class="zanshang" slot="reference" type="danger" round plain>赞赏</el-button>
-        </el-popover>
-      </div>
+<!--      <div class="appreciate">-->
+<!--        <el-popover-->
+<!--            placement="bottom"-->
+<!--            title=""-->
+<!--            width="300"-->
+<!--            trigger="hover"-->
+<!--            content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">-->
+<!--          <div class="give-money">-->
+<!--            <div class="give-money-item">-->
+<!--              <el-image :src="wechart" title="微信支付"></el-image>-->
+<!--              <p>微信</p>-->
+<!--            </div>-->
+<!--            <div class="give-money-item">-->
+<!--              <el-image :src="alipay" title="支付宝支付"></el-image>-->
+<!--              <p>支付宝</p>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <el-button class="zanshang" slot="reference" type="danger" round plain>赞赏</el-button>-->
+<!--        </el-popover>-->
+<!--      </div>-->
       <div class="author">
         <ul>
           <li>作者 {{ blog.userNickName }}</li>
@@ -290,7 +290,6 @@ export default {
           blogId: comment.blogId,
           userId: this.$store.state.userInfo.id,
           avatar: this.$store.state.userInfo.avatar,
-          email: this.$store.state.userInfo.email,
           nickname: this.$store.state.userInfo.nickname,
           adminComment: this.$store.state.userInfo.id === this.blog.userId,
           parentCommentId: -1

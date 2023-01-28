@@ -186,7 +186,7 @@ export default {
     this.getBlogList()
     this.getTagList()
     this.getRecommendList()
-    let str = '这是我的个人博客、会分享关于编程，开发以及其他方面的一些内容，希望可以对您有所帮助...';
+    let str = '无他，惟手熟尔...';
     let idx = 0;
     let that = this
     let timer = setTimeout( function fn() {

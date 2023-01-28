@@ -2,7 +2,7 @@
   <div class="box">
     <aside class="animate__animated animate__bounceInLeft sidebar">
       <div class="avatar">
-        <img :src="$store.state.oss + '2023-01-24/bf2ecd64-5caf-4467-bb1c-7b4aec8b17fa_y.jpg'" title="mxp">
+        <img :src="$store.state.oss + 'default/fd.jpg'" title="mxp">
       </div>
       <nav class="nav">
         <a v-for="intro in introduceList" @click="showSection(intro.name)" :key="intro.id"><i :class="intro.icon" style="margin-right: 10px"></i> {{intro.title}}</a>

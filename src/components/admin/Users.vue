@@ -40,7 +40,7 @@
         </el-table-column>
         <el-table-column label="操作" width="60px" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" circle type="danger" icon="el-icon-delete"
+            <el-button size="mini" circle type="danger" icon="el-icon-delete" :disabled="scope.row.type === 2"
                        @click="deleteUser(scope.row.id)"></el-button>
           </template>
         </el-table-column>

@@ -43,12 +43,12 @@ export default {
                 username: [
                     // 必填，提示消息，鼠标焦点消失时触发
                     {required: true, message: "请输入用户名", trigger: "blur"},
-                    {min: 2, max: 10, message: "长度在2-10个字符之间"}
+                    {min: 2, max: 16, message: "长度在2-10个字符之间"}
                 ],
                 // 验证密码是否合法
                 password: [
                     {required: true, message: "请输入密码", trigger: "blur"},
-                    {min: 6, max: 10, message: "长度在 6 到 10 个字符", trigger: "blur"}
+                    {min: 6, max: 16, message: "长度在 6 到 10 个字符", trigger: "blur"}
                 ]
             },
         }
@@ -75,7 +75,7 @@ export default {
                 this.user.loginLat = local.result.location.lat
                 this.user.loginLng = local.result.location.lng
                 const {data: res} = await this.$blog.post('/user/login', this.user);
-                if (res.code !== 0) return this.$message({message: '用户名或密码错误', type: 'error', offset: 80})
+                if (res.code !== 0) return this.$message({message: res.msg, type: 'error', offset: 80})
                 this.$message({message: '登录成功', type: 'success', offset: 80});
                 this.$refs.loginFormRef.resetFields()
                 window.sessionStorage.setItem("token", JSON.stringify(res.data.token));

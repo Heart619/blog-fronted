@@ -128,7 +128,7 @@ export default {
         this.idx = -1
         this.tag.id = null
         this.createTagForm.name = ''
-        this.$message.success(res.message)
+        this.$message.success(res.data.msg)
       })
     },
     // 根据id删除标签

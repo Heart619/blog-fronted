@@ -3,7 +3,7 @@
         <!--    center aligned居中-->
         <el-row :gutter="20" class=" footer-info">
             <el-col class="ewm" :xs="24" :sm="4" >
-                <el-image :src="$store.state.oss + '2023-01-24/bf2ecd64-5caf-4467-bb1c-7b4aec8b17fa_y.jpg'" alt="图片加载失败"
+                <el-image lazy :src="$store.state.oss + 'default/wechat.png'" :preview-src-list="[$store.state.oss + 'default/wechat.png']" alt="图片加载失败"
                           class="ui rounded image" style="width: 110px"/>
             </el-col>
             <el-col class="new-blog" :xs="24" :sm="7">
@@ -31,8 +31,8 @@
         </el-row>
         <el-row>
             <div class="author">
-                <p class="m-text-thin m-text-spaced m-opacity-mini">Copright©2018-2022 taiyonoyoni Designed by
-                    taiyonoyoni</p>
+<!--                <p class="m-text-thin m-text-spaced m-opacity-mini">Copright©2018-2022 taiyonoyoni Designed by-->
+<!--                    taiyonoyoni</p>-->
             </div>
         </el-row>
     </div>

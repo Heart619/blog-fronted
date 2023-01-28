@@ -107,11 +107,11 @@ export default {
           authName: '随笔',
           path: 'essay'
         },
-        // {
-        //   id: 3,
-        //   authName: '项目',
-        //   path: 'project'
-        // },
+        {
+          id: 3,
+          authName: '项目',
+          path: 'project'
+        },
         {
           id: 4,
           authName: '留言',
@@ -157,7 +157,7 @@ export default {
     }
   },
   created() {
-    const idx = Math.floor(Math.random() * 10);
+    const idx = Math.floor(Math.random() * 21);
     this.bgUrl = `url(${this.$store.state.oss}bg/${idx}.jpg)`
   },
   mounted() {

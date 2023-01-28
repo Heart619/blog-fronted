@@ -4,7 +4,6 @@
       <el-col :span="24">
         <h2 style="color: white;background-color: rgba(0,0,0,0.15)">完整项目</h2>
       </el-col>
-      <!--      <el-col :span="24">-->
       <div class="animate__animated animate__fadeInLeft"
            v-for="project in projectList" :key="project.id">
         <a :href="project.url" style="text-decoration: none" target="_blank">
@@ -14,13 +13,15 @@
               <h3>{{project.title}}</h3>
               <p class="info">{{project.content}}</p>
               <div class="proTech">
-                <p class="tech">{{project.techs}}</p>
+<!--                <p class="tech">{{project.techs}}</p>-->
+                <el-tag v-for="tag in project.techs.split(',')" style="margin: 3px" size="small" closable>
+                  {{ tag }}
+                </el-tag>
               </div>
             </div>
           </el-card>
         </a>
       </div>
-      <!--      </el-col>-->
       <el-col v-if="demoList.length > 0" :span="24">
         <h2 style="color: white;background-color: rgba(0,0,0,0.15)">小练习</h2>
       </el-col>
@@ -28,7 +29,7 @@
         <el-col :xs="24" :sm="12" :lg="6" v-for="(project) in demoList" :key="project.id">
           <a :href="project.url" style="text-decoration: none;" target="_blank">
             <el-card shadow="hover"
-                     :style="'background-image: url('+project.pic_url+');'"
+                     :style="'background-image: url('+ $store.state.oss + project.picUrl +');'"
                      class="animate__animated animate__fadeInLeft demo">
               <div class="pro-info">
                 <h3>{{project.title}}</h3>
