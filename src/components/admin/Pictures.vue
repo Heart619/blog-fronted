@@ -4,11 +4,12 @@
     <waterfall id="waterfall_box" :width="itemWidth" :gutterWidth="gutterWidth" :col="col" :data="pictureList">
       <template>
         <div v-for="p in pictureList" class="waterfall_item" :key="p.id">
-          <el-card class="imgs" >
+          <el-card class="imgs">
             <div style="width: 100%; height: 100%">
-<!--              <img class="images" v-if="p.image" :lazy-src="$store.state.oss + p.image" @click="showImg(p.image)"/>-->
-              <el-image class="images" v-if="p.image" :src="$store.state.oss + p.image" :preview-src-list="urlList"></el-image>
-              <span>{{p.image}}</span>
+              <!--              <img class="images" v-if="p.image" :lazy-src="$store.state.oss + p.image" @click="showImg(p.image)"/>-->
+              <el-image class="images" v-if="p.image" :src="$store.state.oss + p.image"
+                        :preview-src-list="urlList"></el-image>
+              <span>{{ p.image }}</span>
               <el-button size="mini" type="danger" circle @click="deletePic(p.id, p.image)">
                 <i class="el-icon-delete"></i>
               </el-button>
@@ -23,6 +24,7 @@
 
 <script>
 import singleUpload from "../upload/singleUpload";
+
 export default {
   components: {
     singleUpload
@@ -38,7 +40,7 @@ export default {
     return {
       urlList: [],
       pictureList: [],
-      renderList:[],
+      renderList: [],
       waterfall_box_width: 0,
       waterfall_box_height: 0,
       waterfall_col_num: 0,
@@ -48,21 +50,30 @@ export default {
       img_margin_bottom: 20,
       dialogVisible: false,
       dialogImageUrl: '',
+      page: 1,
+      limit: 8,
+      totalPage: 1,
     }
   },
   created() {
     this.getPicList()
   },
-  computed:{
-    itemWidth(){
+  computed: {
+    itemWidth() {
       return 270 // #rem布局 计算宽度
     },
-    gutterWidth(){
-      return (18*0.5*(document.documentElement.clientWidth/270))	//#rem布局 计算x轴方向margin(y轴方向的margin自定义在css中即可)
+    gutterWidth() {
+      return (18 * 0.5 * (document.documentElement.clientWidth / 270))	//#rem布局 计算x轴方向margin(y轴方向的margin自定义在css中即可)
     },
-    col(){
-      return Math.floor(document.documentElement.clientWidth/270)
+    col() {
+      return Math.floor(document.documentElement.clientWidth / 270)
     }
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.lazyLoading);
+  },
+  mounted() {
+    window.addEventListener('scroll', this.lazyLoading); // 滚动到底部，再加载的处理事件
   },
   methods: {
     handleRemove() {
@@ -72,14 +83,14 @@ export default {
       // console.log(res.data)
       this.dialogImageUrl = res.data
     },
-    scroll(scrollData){
+    scroll(scrollData) {
       // console.log(scrollData)
     },
-    switchCol(col){
+    switchCol(col) {
       this.col = col
       // console.log(this.col)
     },
-    loadmore(index){
+    loadmore(index) {
       this.data = this.data.concat(this.data)
     },
     showImg(url) {
@@ -104,8 +115,8 @@ export default {
     async submitImg(url) {
       if (url === ' ') return;
       await this.$blog.post('/admin/pictures/saveImg', {
-          'image': url,
-          'type': 2
+        'image': url,
+        'type': 2
       }).then(({data: res}) => {
         if (res.code === 401) {
           this.$router.push({path: this.$store.state.errorPagePath})
@@ -118,14 +129,28 @@ export default {
         });
       })
     },
+    lazyLoading () { // 滚动到底部，再加载的处理事件\
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+      const clientHeight = document.documentElement.clientHeight
+      const scrollHeight = document.documentElement.scrollHeight
+
+      if (scrollTop + clientHeight >= scrollHeight) {
+        // 滚动到底部，逻辑代码
+        ++this.page;
+        if (this.page > this.totalPage) return;
+        this.getPicList()
+      }
+    },
     async getPicList() {
-      const {data: res} = await this.$blog.get('/admin/pictures/getWallImg')
+      const {data: res} = await this.$blog.get(`/admin/pictures/list?page=${this.page}&limit=${this.limit}`)
       if (res.code === 401) {
         await this.$router.push({path: this.$store.state.errorPagePath})
         return;
       }
-      this.pictureList = res.data
-      for (let i = 0; i < this.pictureList.length; ++i) {
+      this.totalPage = res.page.totalPage
+      let i = this.pictureList.length;
+      this.pictureList = [...this.pictureList, ...res.page.list]
+      for (; i < this.pictureList.length; ++i) {
         this.urlList.push(this.$store.state.oss + this.pictureList[i].image);
       }
     },
@@ -155,73 +180,77 @@ export default {
           if (this.pictureList[i].id !== id) temp.push(this.pictureList[i]);
         this.pictureList = temp;
         this.$message.success('删除成功！')
-      }).catch(err => {})
+      }).catch(err => {
+        console.log(err)
+        this.$message.error('网络繁忙，请稍后再试')
+      })
     }
   }
 }
 </script>
 
 <style scoped lang="less">
-  .el-card /deep/ .el-card__body{
-    padding: 0;
-  }
-  #waterfall_box {
-    width: 100%;
-    position: relative;
-    margin: 20px auto;
+.el-card /deep/ .el-card__body {
+  padding: 0;
+}
 
-    .waterfall_item {
+#waterfall_box {
+  width: 100%;
+  position: relative;
+  margin: 20px auto;
 
-      .imgs {
-        position: relative;
-        margin-bottom: 20px;
+  .waterfall_item {
 
-        img {
-          width: 100%;
-        }
+    .imgs {
+      position: relative;
+      margin-bottom: 20px;
 
-        span {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          line-height: 18px;
-          font-size: small;
-          color: #eee;
-          background-color: rgba(0, 0, 0, 0.3);
-          visibility: hidden;
-        }
-
-        button {
-          position: absolute;
-          top: 0;
-          right: 0;
-          visibility: hidden;
-        }
+      img {
+        width: 100%;
       }
 
-    }
-
-    .waterfall_item:hover {
-      cursor: pointer;
-      overflow: hidden;
-
-
       span {
-        color: white;
-        transition: all .3s;
-        visibility: visible;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        line-height: 18px;
+        font-size: small;
+        color: #eee;
+        background-color: rgba(0, 0, 0, 0.3);
+        visibility: hidden;
       }
 
       button {
-        visibility: visible;
-      }
-
-      img{
-        transform: scale(1.1);
-        width: 100%;
-        transition: .6s;
+        position: absolute;
+        top: 0;
+        right: 0;
+        visibility: hidden;
       }
     }
+
   }
+
+  .waterfall_item:hover {
+    cursor: pointer;
+    overflow: hidden;
+
+
+    span {
+      color: white;
+      transition: all .3s;
+      visibility: visible;
+    }
+
+    button {
+      visibility: visible;
+    }
+
+    img {
+      transform: scale(1.1);
+      width: 100%;
+      transition: .6s;
+    }
+  }
+}
 
 </style>

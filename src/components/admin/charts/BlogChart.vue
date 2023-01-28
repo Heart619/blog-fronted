@@ -76,7 +76,7 @@ export default {
                     type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
                 },
                 xAxis: {
-                    name: '周几',
+                    name: '月份',
                     type: 'category',
                     // 设置X轴数据旋转倾斜
                     axisLabel: {
@@ -129,12 +129,7 @@ export default {
               await this.$router.push({path: this.$store.state.errorPagePath})
               return;
             }
-            let list = []
-            res.data.forEach((item) => {
-                let ls = item.split(',')
-                list = list.concat({date: ls[0], views: ls[1]})
-            })
-            this.countByMonth = list
+            this.countByMonth = res.data
             this.updateChart()
         },
         async getBlogData() {
@@ -143,12 +138,7 @@ export default {
               await this.$router.push({path: this.$store.state.errorPagePath})
               return;
             }
-            let list = []
-            res.data.forEach((item) => {
-                let ls = item.split(',')
-                list = list.concat({date: ls[0], views: ls[1]})
-            })
-            this.countByMonth = list
+            this.countByMonth = res.data
             this.updateChart()
         },
         async getAppreciateCountByMonth() {
@@ -157,12 +147,7 @@ export default {
               await this.$router.push({path: this.$store.state.errorPagePath})
               return;
             }
-            let list = []
-            res.data.forEach((item) => {
-                let ls = item.split(',')
-                list = list.concat({date: ls[0], views: ls[1]})
-            })
-            this.countByMonth = list
+            this.countByMonth = res.data
             // console.log(res.data)
             this.updateChart()
         },
@@ -172,12 +157,7 @@ export default {
               await this.$router.push({path: this.$store.state.errorPagePath})
               return;
             }
-            let list = []
-            res.data.forEach((item) => {
-                let ls = item.split(',')
-                list = list.concat({date: ls[0], views: ls[1]})
-            })
-            this.countByMonth = list
+            this.countByMonth = res.data
             // console.log(res.data)
             this.updateChart()
         },

@@ -10,7 +10,7 @@
         <h1 style="margin: 0;">评论管理</h1>
       </div>
       <ul style="padding: 0; overflow:auto" class="comment-list">
-          <li class="comment" v-for="cmt in commentList" :key="cmt.id">
+          <li class="comment" v-for="(cmt, idx) in commentList" :key="cmt.id">
             <el-avatar :src="$store.state.oss + cmt.avatar"></el-avatar>
             <div class="content">
               <div style="display: flex;justify-content: space-between;width: 100%">
@@ -21,7 +21,7 @@
                   <span @click="getBlogInfo(cmt.blogId)" class="blog">{{ cmt.blogTitle }}</span>
                 </div>
                 <div class="op">
-                  <span class="del" @click="deleteCommentById(cmt.id)">删除</span>
+                  <span class="del" @click="deleteCommentById(cmt.id, idx)">删除</span>
                 </div>
               </div>
               <p class="reply">{{ cmt.content }}</p>
@@ -80,7 +80,7 @@ export default {
       this.commentList = [...this.commentList, ...res.page.list]
     },
     // 删除评论
-    async deleteCommentById(id) {
+    async deleteCommentById(id, index) {
       // 弹出对话框
       const confirmResult = await this.$confirm(
           '此操作将永久删除该评论, 是否继续',
@@ -91,9 +91,9 @@ export default {
             type: 'warning'
           }
       ).then(async () => {
-        const {data: res} = await this.$blog.get(`/admin/comment/${id}/delete`);
+        const {data: res} = await this.$blog.post(`/admin/comment/${id}/delete`);
         if (res.code === 0) {
-          await this.getCommentList()
+          this.commentList.splice(index, 1)
           this.$message.success('删除成功！')
           return
         }

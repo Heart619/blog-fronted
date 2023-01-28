@@ -8,6 +8,14 @@
     <el-card shadow="hover">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="项目列表" name="first">
+          <el-row :gutter="5">
+            <el-col :span="8">
+              <el-input placeholder="请输入项目名称查找" v-model="search"></el-input>
+            </el-col>
+            <el-col :span="3">
+              <el-button type="primary" @click="searchProjectList">查找项目</el-button>
+            </el-col>
+          </el-row>
           <el-table :data="projectList" border stripe>
             <el-table-column type="index"></el-table-column>
             <el-table-column label="项目名称" prop="title"></el-table-column>
@@ -31,7 +39,7 @@
             <el-table-column label="技术栈" prop="techs">
               <template v-if="scope.row.techs!==null" slot-scope="scope">
                 <el-tag v-for="(tag,i) in scope.row.techs.split(',')" style="margin: 3px" size="small" closable
-                        @close="handleClose(i,scope.row)">{{tag}}
+                        @close="handleClose(i,scope.row)">{{ tag }}
                 </el-tag>
                 <el-input size="small" style="width: 100px;" class="input-new-tag" v-if="scope.row.inputVisible"
                           v-model="scope.row.inputValue" ref="saveInput"
@@ -55,6 +63,15 @@
               </template>
             </el-table-column>
           </el-table>
+          <el-pagination
+              background
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :page-size="limit"
+              :current-page="page"
+              :layout="pagLayout"
+              :total="totalCount">
+          </el-pagination>
         </el-tab-pane>
         <el-tab-pane label="发布项目" name="second">
           <el-form label-position="left" label-width="80px" style="text-align: left" ref="publishFormRef"
@@ -97,6 +114,8 @@
 <script>
 
 import singleUpload from "../upload/singleUpload";
+import {mapState} from "vuex";
+
 export default {
   components: {
     singleUpload
@@ -120,11 +139,24 @@ export default {
       types: [
         {id: 0, name: '完整项目'},
         {id: 1, name: '小练习'}
-      ]
+      ],
+      search: '',
+      page: 1,
+      limit: 4,
+      totalCount: 0,
     }
   },
   mounted() {
     this.getProjectList()
+  },
+  computed: {
+    pagLayout() {
+      if (this.screenWidth < 768) {
+        return 'prev, pager, next'
+      } else {
+        return 'total, prev, pager, next, jumper'
+      }
+    }
   },
   methods: {
     // 点击按钮,展示文本输入框
@@ -202,10 +234,11 @@ export default {
     },
     // 获取项目列表
     async getProjectList() {
-      const {data: res} = await this.$blog.get('/project/list')
+      const {data: res} = await this.$blog.get(`/project/list?page=${this.page}&limit=${this.limit}&search=${this.search}`)
       if (res.code !== 0) {
         return this.$message.error('获取项目列表失败！')
       }
+      this.totalCount = res.page.totalCount
       res.page.list.forEach(item => {
         // 控制文本框的显示与隐藏
         item.inputVisible = false
@@ -255,7 +288,21 @@ export default {
         }
         return this.$message.error('项目更新失败！')
       }
-    }
+    },
+    searchProjectList() {
+      this.page = 1;
+      this.getProjectList();
+    },
+    // 修改当前页大小
+    handleSizeChange(newSize) {
+      this.limit = newSize
+      this.getProjectList()
+    },
+    // 修改当前页码
+    handleCurrentChange(newSize) {
+      this.page = newSize
+      this.getProjectList()
+    },
   }
 
 }

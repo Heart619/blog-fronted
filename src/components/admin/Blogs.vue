@@ -20,8 +20,8 @@
                 </el-option>
             </el-select>
             <el-button @click="clearSearh">清除</el-button>
-            <el-button type="primary" @click="getBlogList">搜索</el-button>
-            <el-table :data="blogList" border stripe >
+            <el-button type="primary" @click="searchBlogList">搜索</el-button>
+            <el-table :data="blogList" border stripe>
                 <el-table-column type="expand">
                     <template slot-scope="scope">
                         <div class="blog-information">
@@ -155,7 +155,7 @@ export default {
                 typeId: null
             },
             pagenum: 1,
-            pagesize: 8,
+            pagesize: 5,
             blogList: [],
             totalcount: 0,
             editing: false,
@@ -251,6 +251,10 @@ export default {
             this.pagesize = newSize
             this.getBlogList()
         },
+        searchBlogList() {
+            this.pagenum = 1;
+            this.getBlogList()
+        },
         // 获取博客列表
         async getBlogList() {
             const {data: res} = await this.$blog.post('/blog/list', {
@@ -286,7 +290,7 @@ export default {
             if (confirmResult !== 'confirm') {
                 return this.$message.info('已取消删除')
             }
-            const {data: res} = await this.$blog.get('/admin/blog/' + id + '/delete');
+            const {data: res} = await this.$blog.post(`/admin/blog/${id}/delete`);
             if (res.code === 401) {
               await this.$router.push({path: this.$store.state.errorPagePath})
               return;
@@ -465,7 +469,7 @@ export default {
             this.queryInfo.query = ''
             this.type = ''
             this.getBlogList()
-        }
+        },
     }
 }
 </script>

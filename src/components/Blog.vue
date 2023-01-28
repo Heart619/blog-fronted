@@ -74,27 +74,27 @@
         <div class="header">
           评论
         </div>
-        <div v-for="cmt in rootCmtTree" :key="cmt.id">
+        <div v-for="(cmt, idx) in rootCmtTree" :key="cmt.id">
           <comment :cmt="cmt" :parent-id="-1" :rp-active-id="rpActiveId"></comment>
           <reply style="margin-left: 40px" v-if="rpActiveId === cmt.id" :id="cmt.id"
                  :blog-author="blog.userId" :blog-id="blog.id" :comment="cmt"
                  v-on:quit="cancel" v-on:newCmt="replyComp"></reply>
           <span v-else class="reply" @click="rpActiveId = cmt.id">回复</span>
           <span v-if="administrator || userInfo && cmt.userId === userInfo.id" class="delete"
-                @click="deleteComment(cmt.id)">删除</span>
-          <div v-show="cmt.showChildren" style="margin-left: 40px" v-for="rp in cmt.children" :key="rp.id">
+                @click="deleteComment(cmt.id, rootCmtTree, idx)">删除</span>
+          <div v-show="cmt.showChildren" style="margin-left: 40px" v-for="(rp, idx) in cmt.children" :key="rp.id">
             <comment :cmt="rp" :parent-id="cmt.id" :rp-active-id="rpActiveId"></comment>
             <reply style="margin-left: 40px" v-if="rpActiveId === rp.id" :id="rp.id"
                    :blog-author="blog.userId" :blog-id="blog.id" :comment="cmt"
                    v-on:quit="cancel" v-on:newCmt="replyComp"></reply>
             <span v-else class="reply" @click="rpActiveId = rp.id">回复</span>
             <span v-if=" administrator || userInfo && rp.userId === userInfo.id" class="delete"
-                  @click="deleteComment(rp.id)">删除</span>
+                  @click="deleteComment(rp.id, cmt.children, idx)">删除</span>
           </div>
           <hr>
           <p class="reply" v-show="!cmt.showChildren" @click="showCmt(cmt)">点击展开回复</p>
-          <p class="reply" v-show="cmt.showChildren && cmt.children.len !== 0" @click="showCmt(cmt)">收起回复</p>
-          <p class="reply" v-show="cmt.showChildren && cmt.children.len === 0">暂无更多回复</p>
+          <p class="reply" v-show="cmt.showChildren && cmt.children.length !== 0" @click="showCmt(cmt)">收起回复</p>
+          <p class="reply" v-show="cmt.showChildren && cmt.children.length === 0 && !loading">暂无更多回复</p>
         </div>
       </el-card>
       <el-form class="commmet-reply" :model="commentForm" :rules="commentFormRules" ref="commentFormRef">
@@ -218,8 +218,13 @@ export default {
     // 获取博客详情信息
     async getBlogInfomation() {
       const {data: res} = await this.$blog.get(`/blog/${this.$route.query.id}`)
+      if (res.code !== 0) {
+        this.$message.error(res.msg);
+        return;
+      }
       this.blog = res.data
       this.blogId = this.blog.id
+      window.scrollTo({top: 0, behavior: 'smooth'})
       await this.getBlogComments(this.blog.id);
     },
 
@@ -307,10 +312,10 @@ export default {
       })
     },
     // 删除评论
-    async deleteComment(id) {
-      const {data: res} = await this.$blog.get(`/comment/${id}/delete`)
+    async deleteComment(id, arr, index) {
+      const {data: res} = await this.$blog.post(`/admin/comment/${id}/delete`)
       if (res.code === 0) {
-        await this.getBlogInfomation()
+        arr.splice(index, 1)
         this.$message({message: "删除评论成功！", type: 'success', offset: 80});
       } else {
         this.$message({message: "删除评论失败！", type: 'error', offset: 80});

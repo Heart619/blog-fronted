@@ -59,7 +59,7 @@
       </el-col>
       <el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 6}" :lg="{span: 6}" :xl="{span: 6}"
               style="margin-bottom:30px;">
-        <comment-list/>
+        <comment-list id="comments" :comments="commentList"/>
       </el-col>
       <el-col :xs="{span: 24}" :sm="{span: 12}" :md="{span: 6}" :lg="{span: 6}" :xl="{span: 6}"
               style="margin-bottom:30px;">
@@ -90,12 +90,44 @@ export default {
       commentCount: 0,
       selectedCard: 0,
       recommendList: [],
+      page: 1,
+      totalPage: 0,
+      limit: 4,
+      commentList: []
     }
   },
   created() {
     this.getcountList();
+    this.getCommentList();
+  },
+  mounted () {
+   document.getElementById("comments").addEventListener('scroll', this.lazyLoadingCmt)
   },
   methods: {
+    lazyLoadingCmt() { // 滚动到底部，再加载的处理事件\
+      const doc = document.getElementById("comments");
+      const scrollTop = doc.scrollTop || doc.scrollTop
+      const clientHeight = doc.clientHeight
+      const scrollHeight = doc.scrollHeight
+      if (scrollTop + clientHeight >= scrollHeight) {
+        // 滚动到底部，逻辑代码
+        ++this.page;
+        if (this.page > this.totalPage) return;
+        this.getCommentList();
+      }
+    },
+    // 获取评论列表
+    async getCommentList() {
+      this.loading = true
+      const {data: res} = await this.$blog.get(`/admin/comment/list?limit=${this.limit}&page=${this.page}`);
+      this.loading = false
+      if (res.code === 401) {
+        await this.$router.push({path: this.$store.state.errorPagePath})
+        return;
+      }
+      this.totalPage = res.page.totalPage
+      this.commentList = [...this.commentList, ...res.page.list]
+    },
     async getcountList() {
       const {data: res} = await this.$blog.get('/admin/blog/getBlogCount')
       const {data: res2} = await this.$blog.get('/admin/blog/getViewCount')

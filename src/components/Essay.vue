@@ -5,7 +5,7 @@
       <el-timeline v-show="true" class="animate__animated animate__fadeInLeft">
         <el-timeline-item :color="essay.borderColor" v-for="essay in essayList" :key="essay.id" :timestamp="essay.createTime | dataFormat" placement="top">
           <el-card style="letter-spacing: 1px;" :style="calcuteStyle(essay)">
-            <h2 v-if="essay.title">{{essay.title}}</h2>
+            <h2>{{essay.title}}</h2>
             <div class="typo" v-html="essay.content"></div>
             <p>
               <el-avatar size="small" :src="$store.state.oss + essay.avatar"></el-avatar>
@@ -13,7 +13,6 @@
             </p>
           </el-card>
          </el-timeline-item>
-          <div :v-loading="loading" element-loading-text="正在加载"></div>
       </el-timeline>
     </el-container>
   </div>
@@ -27,7 +26,6 @@ export default {
             page: 1,
             limit: 4,
             totalPage: 0,
-            loading: false
         }
     },
     created() {
@@ -45,7 +43,7 @@ export default {
           const clientHeight = document.documentElement.clientHeight
           const scrollHeight = document.documentElement.scrollHeight
 
-          if (scrollTop + clientHeight >= scrollHeight && !this.loading) {
+          if (scrollTop + clientHeight >= scrollHeight) {
             // 滚动到底部，逻辑代码
             ++this.page;
             if (this.page > this.totalPage) return;
@@ -53,9 +51,7 @@ export default {
           }
         },
         async getEssayList(){
-            this.loading = true;
             const {data: res} = await this.$blog.get(`/essay/list?page=${this.page}&limit=${this.limit}`);
-            this.loading = false;
             if (res.code === 0){
                   let i = this.essayList.length;
                   this.totalPage = res.page.totalPage

@@ -9,6 +9,15 @@
     <el-card shadow="hover">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="随笔管理" name="first">
+          <el-row :gutter="5">
+            <el-col :span="8">
+              <el-input placeholder="请输入随笔标题" v-model="search"></el-input>
+            </el-col>
+            <el-col :span="3">
+              <el-button type="primary" @click="searchEssayList">查找随笔</el-button>
+            </el-col>
+          </el-row>
+
           <el-table :data="essayList" border stripe>
             <el-table-column type="index" align="center"></el-table-column>
             <el-table-column label="随笔标题" prop="title" width="700px"></el-table-column>
@@ -48,6 +57,15 @@
               </template>
             </el-table-column>
           </el-table>
+          <el-pagination
+              background
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :page-size="limit"
+              :current-page="page"
+              :layout="pagLayout"
+              :total="totalCount">
+          </el-pagination>
         </el-tab-pane>
         <el-tab-pane label="新建随笔" name="second">
           <el-form label-position="left" label-width="80px" style="text-align: left" ref="publishFormRef"
@@ -95,11 +113,23 @@ export default {
       activeName: 'first',
       essayList: [],
       vis: false,
-
+      page: 1,
+      limit: 5,
+      totalCount: 0,
+      search: '',
     }
   },
   created() {
     this.getEssayList()
+  },
+  computed:{
+    pagLayout(){
+      if (this.screenWidth<768){
+        return 'prev, pager, next'
+      } else {
+        return 'total, prev, pager, next, jumper'
+      }
+    }
   },
   methods: {
     // 将图片上传到服务器，返回的地址替换到md中
@@ -117,7 +147,8 @@ export default {
     },
     // TODO 删除不需要的图片
     async imgDel(pos) {
-      console.log(pos)
+      this.$message.warning("功能待完善")
+      // console.log(pos)
       // console.log(pos[0])
       // let len = pos[0].split('/').length
       // let filename = pos[0].split('/')[len - 1]
@@ -126,15 +157,19 @@ export default {
     },
     // 获取随笔列表
     async getEssayList() {
-      const {data: res} = await this.$blog.post('/essay/list', {
-        userId: this.$store.state.userInfo.type === 2 ? undefined : this.$store.state.userInfo.id
-      })
+      let uid = this.$store.state.userInfo.type;
+      const {data: res} = await this.$blog.get(`/essay/list?page=${this.page}&limit=${this.limit}&search=${this.search}&userId=${uid === 2 ? '' : this.$store.state.userInfo.id}`)
       if (res.code === 0) {
+        this.totalCount = res.page.totalCount
         this.essayList = res.page.list
         this.essayList.forEach(item => {
           item.vis = false
         })
       }
+    },
+    searchEssayList() {
+      this.page = 1;
+      this.getEssayList();
     },
     backPage() {
       this.blog.firstPicture = ''
@@ -198,7 +233,7 @@ export default {
       if (confirmResult !== 'confirm') {
         return this.$message.info('已取消删除')
       }
-      const {data: res} = await this.$blog.get(`/admin/essay/${id}/delete`)
+      const {data: res} = await this.$blog.post(`/admin/essay/${id}/delete`)
       if (res.code === 0) {
         await this.getEssayList()
         return this.$message.success('随笔删除成功！')
@@ -214,7 +249,17 @@ export default {
     editByid(row) {
       this.publishForm = row
       this.activeName = 'second'
-    }
+    },
+    // 修改当前页大小
+    handleSizeChange(newSize) {
+      this.limit = newSize
+      this.getEssayList()
+    },
+    // 修改当前页码
+    handleCurrentChange(newSize) {
+      this.page = newSize
+      this.getEssayList()
+    },
   }
 }
 </script>

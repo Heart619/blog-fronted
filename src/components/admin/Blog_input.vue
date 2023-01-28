@@ -171,7 +171,8 @@ export default {
       },
       // TODO 删除不需要的图片
       async imgDel(pos) {
-        console.log(pos)
+        this.$message.warning("功能待完善")
+        // console.log(pos)
         // console.log(pos[0])
         // let len = pos[0].split('/').length
         // let filename = pos[0].split('/')[len - 1]

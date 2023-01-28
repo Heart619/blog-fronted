@@ -23,7 +23,7 @@
                 <i v-if="selected" class="el-icon-back" @click="updateBlogList"></i>
                 <span>{{selectMethod}}</span>
               </div>
-              <span>共 <span style="color: #3a8ee6; font-size: 20px">{{ totalcount }}</span> 篇</span>
+              <span>共 <span style="color: #3a8ee6; font-size: 20px">{{ totalCount }}</span> 篇</span>
             </div>
               <el-empty v-if="blogList.length === 0" style="width: 800px; height: 500px"></el-empty>
               <el-row v-if="blogList.length !== 0" v-for="blog in blogList"
@@ -67,7 +67,7 @@
                   :page-size="queryInfo.limit"
                   :current-page="queryInfo.curPage"
                   :layout="pagLayout"
-                  :total="totalcount">
+                  :total="totalCount">
           </el-pagination>
         </el-col>
         <el-col :xs="24" :sm="7">
@@ -140,13 +140,13 @@ export default {
   data() {
     return {
       count: 0,
-      totalcount: 0,
+      totalCount: 0,
       queryInfo: {
         query: '',
         typeId: -1,
         tagId: -1,
-        curPage: 1,
-        limit: 8
+        page: 1,
+        limit: 6,
       },
       intro:'',
       blogList: [],
@@ -244,7 +244,7 @@ export default {
       let {data: res} = await this.$blog.post('/blog/list', this.queryInfo)
       res = res.page
       this.blogList = res.list
-      this.totalcount = res.totalCount
+      this.totalCount = res.totalCount
       this.queryInfo.tagId = -1
       this.queryInfo.typeId = -1
     },
@@ -255,7 +255,7 @@ export default {
     },
     // 修改当前页码
     handleCurrentChange(newSize) {
-      this.queryInfo.curPage = newSize
+      this.queryInfo.page = newSize
       this.getBlogList()
     },
     // 修改当前页大小
@@ -268,11 +268,8 @@ export default {
       this.typeId = id
       this.queryInfo.typeId = id
       this.queryInfo.curPage = 1
+      this.queryInfo.page = 1
       await this.getBlogList();
-      // const {data: res} = await this.$blog.get(`/type/${this.typeId}`)
-      // console.log(res)
-      // this.blogList = res.data.content
-      // this.totalcount = res.data.totalElements
       this.selectMethod = '分类: ' + this.typeList.find(item => item.id === this.typeId).name
       this.selected = true
     },
@@ -282,10 +279,8 @@ export default {
       this.tagId = id
       this.queryInfo.tagId = id
       this.queryInfo.curPage = 1
+      this.queryInfo.page = 1
       await this.getBlogList();
-      // const {data: res} = await this.$blog.get(`/tag/${this.tagId}`)
-      // this.blogList = res.data.content
-      // this.totalcount = res.data.totalElements
       this.selectMethod = '标签: ' + this.tagList.find(item => item.id === this.tagId).name
       this.selected = true
     },
