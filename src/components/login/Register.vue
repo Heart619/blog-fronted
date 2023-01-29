@@ -112,11 +112,6 @@ export default {
                 this.user.email = this.Form.email
                 this.user.avatar = this.dialogImageUrl
                 this.user.password = this.$md5(this.Form.password)
-                let local = await this.getLocalCity()
-                this.user.loginProvince = local.result.ad_info.province
-                this.user.loginCity = local.result.ad_info.city
-                this.user.loginLat = local.result.location.lat
-                this.user.loginLng = local.result.location.lng
                 const {data: res} = await this.$blog.post('/user/register', this.user)
                 if (res.code !== 0) return this.$message.error(res.msg)
                 // console.log(res)
@@ -127,15 +122,6 @@ export default {
                 this.$store.commit('getUserInfo')
                 this.$store.commit('cancelRFV')
             })
-        },
-        async getLocalCity(){
-            let data = {
-                key: 'IUTBZ-UHAKU-PD6VI-BZEEY-N3YT3-SCB6J',
-                output:'jsonp'
-            }
-            let url = 'https://apis.map.qq.com/ws/location/v1/ip'
-            const res = await this.$jsonp(url, data)
-            return res
         },
     }
 }

@@ -12,7 +12,6 @@ export default new Vuex.Store({
     registorFormVisiable:false,
     pageName:'index',
     oss: 'http://roxuynt15.hd-bkt.clouddn.com/',
-    threeLocationKey: 'IUTBZ-UHAKU-PD6VI-BZEEY-N3YT3-SCB6J',
     errorPagePath: "/error"
   },
   mutations: {

@@ -24,7 +24,7 @@ export default {
         return {
             essayList: [],
             page: 1,
-            limit: 4,
+            limit: 3,
             totalPage: 0,
         }
     },

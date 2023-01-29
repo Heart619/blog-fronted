@@ -27,13 +27,16 @@ Vue.prototype.$echarts = echarts
 Vue.prototype.$jsonp = VueJsonp
 
 
+// const blog = axios.create({ // 博客后台api地址
+//   baseURL: 'http://127.0.0.1:8090/',
+// })
 const blog = axios.create({ // 博客后台api地址
   baseURL: '/api',
 })
 
-const picture = axios.create({ // 图片服务器api地址
-  baseURL: '/api',
-})
+// const picture = axios.create({ // 图片服务器api地址
+//   baseURL: '/api',
+// })
 
 blog.interceptors.request.use(config => {
   NProgress.start()
@@ -47,7 +50,7 @@ blog.interceptors.response.use(config => {
 })
 
 Vue.prototype.$blog = blog
-Vue.prototype.$picture = picture
+// Vue.prototype.$picture = picture
 
 Vue.config.productionTip = false
 Vue.use(mavonEditor)

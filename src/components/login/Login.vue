@@ -69,11 +69,6 @@ export default {
                 if (!valid) return;
                 this.user.username = this.loginForm.username
                 this.user.password = this.$md5(this.loginForm.password)
-                let local = await this.getLocalCity()
-                this.user.loginProvince = local.result.ad_info.province
-                this.user.loginCity = local.result.ad_info.city
-                this.user.loginLat = local.result.location.lat
-                this.user.loginLng = local.result.location.lng
                 const {data: res} = await this.$blog.post('/user/login', this.user);
                 if (res.code !== 0) return this.$message({message: res.msg, type: 'error', offset: 80})
                 this.$message({message: '登录成功', type: 'success', offset: 80});
@@ -84,15 +79,6 @@ export default {
                 this.$store.commit('cancelLFV')
             })
         },
-        async getLocalCity(){
-            let data = {
-                key: this.$store.state.threeLocationKey,
-                output:'jsonp'
-            }
-            let url = 'https://apis.map.qq.com/ws/location/v1/ip'
-            const res = await this.$jsonp(url, data)
-            return res
-        }
     }
 }
 </script>
