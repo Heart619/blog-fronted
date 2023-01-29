@@ -43,12 +43,12 @@ export default {
                 username: [
                     // 必填，提示消息，鼠标焦点消失时触发
                     {required: true, message: "请输入用户名", trigger: "blur"},
-                    {min: 2, max: 16, message: "长度在2-10个字符之间"}
+                    {min: 2, max: 16, message: "长度在2-16个字符之间"}
                 ],
                 // 验证密码是否合法
                 password: [
                     {required: true, message: "请输入密码", trigger: "blur"},
-                    {min: 6, max: 16, message: "长度在 6 到 10 个字符", trigger: "blur"}
+                    {min: 6, max: 16, message: "长度在 6 到 16 个字符", trigger: "blur"}
                 ]
             },
         }
