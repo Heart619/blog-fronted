@@ -19,6 +19,7 @@
       <div v-if="menuHiddenVisiable">
         <el-menu :default-active="activeIndex" class="animate__animated animate__fadeInDown el-menu-hidden"
                  background-color="#545c64" router text-color="#fff" active-text-color="#ffd04b">
+
           <el-menu-item :index="'/'+item.path" v-for="item in menulist" :key="item.id" @click="changePage(item.path)">
             <template slot="title">
               <!--                图标-->
@@ -87,10 +88,8 @@ export default {
         query: '',
         timer: null
       },
-      key: 0,
+      key: 'abc',
       shade: 0,
-      // bgUrl: 'url("http://www.dmoe.cc/random.php")',
-      // bgUrl: 'http://hikari.top/images/bg_1.jpg',
       scrollFlag: false,
       navClass: '',
       searchList: [],
@@ -249,17 +248,12 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped lang="less">
   .search input.el-input__inner {
     background-color: rgba(0, 0, 0, 0.1);
     /*border-radius: 20px;*/
     color: #cccccc;
   }
-</style>
-
-<style scoped lang="less">
-
   .title {
     position: fixed;
     top: 0;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <single-upload v-model="dialogImageUrl"></single-upload>
+    <single-upload v-if="$store.state.userInfo.type === 2" v-model="dialogImageUrl"></single-upload>
     <waterfall id="waterfall_box" :width="itemWidth" :gutterWidth="gutterWidth" :col="col" :data="pictureList">
       <template>
         <div v-for="p in pictureList" class="waterfall_item" :key="p.id">

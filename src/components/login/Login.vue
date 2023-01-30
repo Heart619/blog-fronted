@@ -1,5 +1,5 @@
 <template>
-    <el-dialog class="login_dialog" title="请登录" :visible.sync="loginFormVisiable" @close="resetLoginForm" width="400px" center>
+    <el-dialog class="login_dialog" title="请登录" :visible.sync="$store.state.loginFormVisiable" @close="resetLoginForm" width="400px" center>
         <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" label-width="60px" class="login_form">
             <!--        用户名-->
             <el-form-item prop="username" label="账号">
@@ -20,6 +20,7 @@
 
 <script>
 import {mapState} from 'vuex'
+import { JSEncrypt } from 'jsencrypt'
 
 export default {
     data() {
@@ -27,8 +28,8 @@ export default {
             user:{
                 username: '',
                 password: '',
-                loginProvince: '未知',
-                loginCity: '未知',
+                loginProvince: '',
+                loginCity: '',
                 loginLat: 0, //纬度
                 loginLng: 0, //经度
             },
@@ -68,11 +69,15 @@ export default {
             this.$refs.loginFormRef.validate(async valid => {
                 if (!valid) return;
                 this.user.username = this.loginForm.username
+                // let jse = new JSEncrypt();
+                // jse.setPublicKey("MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCuFZagef2hwVrmtlpQd75MsAQYYBXNdshomzQ8AuOvy1osfhWsDfgCKJUGelLGP2bnkrAs/TcxCm4bLK/B9VK/noRVYAwfoSbFmWuPvHaJSWlZWVVHVEPwtXJmtyckahu4Mhlml3g3DrFkpHNs9dB08k8f6rirdl8VYOPox01msQIDAQAB")
                 this.user.password = this.$md5(this.loginForm.password)
+                // this.user.password = jse.encrypt(this.user.password)
+                console.log(this.user.password)
                 const {data: res} = await this.$blog.post('/user/login', this.user);
                 if (res.code !== 0) return this.$message({message: res.msg, type: 'error', offset: 80})
                 this.$message({message: '登录成功', type: 'success', offset: 80});
-                this.$refs.loginFormRef.resetFields()
+                this.$refs.loginFormRef.resetFields();
                 window.sessionStorage.setItem("token", JSON.stringify(res.data.token));
                 window.sessionStorage.setItem("user", JSON.stringify(res.data.user));
                 this.$store.commit('getUserInfo')

@@ -1,5 +1,5 @@
 <template>
-    <el-dialog class="dialog" title="注册" :visible.sync="registorFormVisiable" @close="resetForm" width="400px" center>
+    <el-dialog class="dialog" title="注册" :visible.sync="$store.state.registorFormVisiable" @close="resetForm" width="400px" center>
         <el-form ref="FormRef" :model="Form" :rules="FormRules" class="form" label-width="80px" label-position="left">
             <!--        昵称-->
             <el-form-item label="昵称" prop="nickname">
@@ -86,9 +86,6 @@ export default {
         }
     },
     computed: {
-        ...mapState([
-            'registorFormVisiable'
-        ]),
       showFileList: {
         get: function () {
           return this.value !== null && this.value !== '' && this.value !== undefined;

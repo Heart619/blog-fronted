@@ -246,8 +246,9 @@ export default {
       }
     },
     // 编辑随笔
-    editByid(row) {
-      this.publishForm = row
+    async editByid(row) {
+      const {data: res} = await this.$blog.get(`/admin/essay/default/${row.id}`)
+      this.publishForm = res.data
       this.activeName = 'second'
     },
     // 修改当前页大小

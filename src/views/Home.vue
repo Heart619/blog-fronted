@@ -1,17 +1,17 @@
 <template>
     <el-container style="width: 100%;max-width: 100%;">
         <el-aside :width="calculateStyle+'px'">
-            <el-menu
-                    :default-active="activePath"
-                    class="el-menu-vertical-demo" unique-opened :collapse="isCollapse"
-                    :collapse-transition="false" router
-                    active-text-color="#409FFF">
-                <!--            一级菜单-->
-                <el-menu-item v-if="$store.state.userInfo.type === 2 || item.vis" :index="item.path" v-for="item in menulist" :key="item.id">
-                    <i :class="iconsObj[item.id]"></i>
-                    <span>{{item.authName}}</span>
-                </el-menu-item>
-            </el-menu>
+          <el-menu
+              :default-active="activePath"
+              class="el-menu-vertical-demo" unique-opened :collapse="isCollapse"
+              :collapse-transition="false" router
+              active-text-color="#409FFF">
+            <!--            一级菜单-->
+            <el-menu-item v-if="$store.state.userInfo.type === 2 || item.vis" :index="item.path" v-for="item in menulist" :key="item.id">
+              <i :class="iconsObj[item.id]"></i>
+              <span>{{item.authName}}</span>
+            </el-menu-item>
+          </el-menu>
         </el-aside>
         <div style="width: 100%">
             <el-header>

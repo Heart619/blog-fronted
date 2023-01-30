@@ -54,13 +54,13 @@
                     <el-avatar :src="$store.state.oss + scope.row.userAvatar"></el-avatar>{{scope.row.userNickName}}
                   </template>
                 </el-table-column>
-                <el-table-column label="分类" prop="type.name" width="170px" align="center">
+                <el-table-column label="分类" prop="type.name" width="150px" align="center">
                     <template slot-scope="scope">
                         <div @click="changeBlogType(scope.row)" class="change-type">{{scope.row.typeName}}
                             <i class="el-icon-edit"></i></div>
                     </template>
                 </el-table-column>
-                <el-table-column label="标签" prop="tags" width="300px">
+                <el-table-column label="标签" prop="tags" width="250px">
                     <template slot-scope="scope">
                         <el-tag size="medium" v-for="(tag, i) in scope.row.tags" :key="tag.id" closable
                                 @close="handleClose(i,scope.row)">{{tag.name}}
@@ -75,7 +75,12 @@
                     </template>
                 </el-table-column>
                 <el-table-column label="阅读量" prop="views" width="100px" align="center"></el-table-column>
-                <el-table-column label="更新时间" prop="updateTime" width="150px" align="center">
+              <el-table-column label="发布时间" prop="createTime" width="110px" align="center">
+                <template slot-scope="scope">
+                  {{scope.row.createTime | dataFormat }}
+                </template>
+              </el-table-column>
+                <el-table-column label="更新时间" prop="updateTime" width="110px" align="center">
                     <template slot-scope="scope">
                         {{scope.row.updateTime | dataFormat }}
                     </template>
@@ -302,18 +307,10 @@ export default {
         // 编辑博客
         editBlogByid(blog) {
             // console.log(blog)
-          this.$blog.get(`/admin/blog/default/${blog.id}`).then(({data: res}) => {
-            if (res.code === 401) {
-              this.$router.push({path: this.$store.state.errorPagePath})
-              return;
-            }
-            if (res.code === 0) {
-              this.$router.push({
-                path: "/admin/blog-input",
-                query: {blog: JSON.stringify(res.data)}
-              })
-            }
-          }).catch(err => {})
+          this.$router.push({
+            path: "/admin/blog-input",
+            query: {blogId: blog.id}
+          })
         },
         // 得到所有的分类
         async getFullTypeList() {
@@ -327,13 +324,13 @@ export default {
         },
         // 修改博客分类
         async changeBlogType(blog) {
+            this.editTypeForm.typeId = blog.typeId;
             this.editTypeDialogFormVisible = true
-            this.editTypeForm.blog = blog
         },
         // 点击取消按钮
         backPage() {
-            this.$refs.editTypeFormRef.resetFields()
             this.editTypeDialogFormVisible = false
+            this.editTypeForm.typeId = null
         },
         // 提交类型修改
         async changeTypeSubmit() {

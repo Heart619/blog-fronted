@@ -151,8 +151,18 @@ export default {
         }
     },
     created(){
-      if (typeof this.$route.query.blog !== 'undefined'){
-          this.blog = JSON.parse(this.$route.query.blog)
+      if (this.$route.query.blogId !== undefined){
+        this.$blog.get(`/admin/blog/default/${this.$route.query.blogId}`).then(({data: res}) => {
+          if (res.code === 401) {
+            this.$router.push({path: this.$store.state.errorPagePath})
+            return;
+          }
+          if (res.code === 0) {
+            this.blog = res.data
+          }
+        }).catch(err => {
+          this.$message.error(err.msg)
+        })
       }
     },
     methods: {

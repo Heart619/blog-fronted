@@ -121,14 +121,14 @@ export default {
         if (res.data.code === 0) {
           if (this.idx === -1) this.tagList.unshift(res.data.data);
           else this.tagList[this.idx].name = res.data.data.name
-        } else if (res.data.code === 500) {
+          this.$message.success(res.data.msg)
+        } else {
           this.$message.error(res.data.msg)
         }
         this.createTagDialogFormVisible = false
         this.idx = -1
         this.tag.id = null
         this.createTagForm.name = ''
-        this.$message.success(res.data.msg)
       })
     },
     // 根据id删除标签

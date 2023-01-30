@@ -5,7 +5,6 @@ import store from './store'
 import mavonEditor from 'mavon-editor'
 import marked from 'marked'
 import axios from 'axios'
-import {VueJsonp} from 'vue-jsonp'
 import NProgress from 'nprogress'
 import './assets/fonts/iconfont.css'
 // import 'element-ui/lib/theme-chalk/index.css'
@@ -24,7 +23,6 @@ Vue.prototype.$md5 = md5;
 Vue.prototype.$marked = marked
 Vue.prototype.$http = axios
 Vue.prototype.$echarts = echarts
-Vue.prototype.$jsonp = VueJsonp
 
 
 // const blog = axios.create({ // 博客后台api地址
@@ -54,7 +52,6 @@ Vue.prototype.$blog = blog
 
 Vue.config.productionTip = false
 Vue.use(mavonEditor)
-Vue.use(VueJsonp)
 Vue.use(vcolorpicker)
 Vue.use(waterfall)
 
