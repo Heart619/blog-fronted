@@ -18,23 +18,19 @@ import waterfall from 'vue-waterfall2'
 import vcolorpicker from 'vcolorpicker'
 // import * as echarts from 'echarts'
 import md5 from 'js-md5'
+import {JSEncrypt} from "jsencrypt";
 
 Vue.prototype.$md5 = md5;
 Vue.prototype.$marked = marked
 Vue.prototype.$http = axios
 Vue.prototype.$echarts = echarts
 
-
-// const blog = axios.create({ // 博客后台api地址
-//   baseURL: 'http://127.0.0.1:8090/',
-// })
 const blog = axios.create({ // 博客后台api地址
   baseURL: '/api',
 })
 
-// const picture = axios.create({ // 图片服务器api地址
-//   baseURL: '/api',
-// })
+const rsa = new JSEncrypt();
+rsa.setPublicKey("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAogfO/bveLnn0Tb7dnxIVXj25KjTmVFBllP0zqYY3FwNVKQ03iKI7kYd01sbnlRHLVcu74nmk41Ux7mHPQx5nghyktLiyovsbwBkqpWNnfmT9DNq89R6Lw9Mrw/L0pJDc9ACGkksGDyFvQjEt/3+h/phMjEkgHU2kA+F0ZCCgZgVOsKQXwL452+NpLH4rekwfXRJw0GCaZeyMPkNYbItsHvCD1CCPYeCJQw9sfYX/TKeDO2LGZKH5xCi672SqAeu36fpUsw4LXAosTln9Xwpvd2+JT3+GOzKhv05j45YtY96L4/zho0FGn7YSPAd+o3JGMg6B0Cb1unnp6PMKwEBMewIDAQAB")
 
 blog.interceptors.request.use(config => {
   NProgress.start()
@@ -48,6 +44,7 @@ blog.interceptors.response.use(config => {
 })
 
 Vue.prototype.$blog = blog
+Vue.prototype.$rsa = rsa
 // Vue.prototype.$picture = picture
 
 Vue.config.productionTip = false

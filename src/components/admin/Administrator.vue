@@ -101,7 +101,6 @@ export default {
     ...mapState([
       'userInfo'
     ])
-
   },
   created() {
     this.getUserInfo()
@@ -109,10 +108,6 @@ export default {
   methods: {
     getUserInfo() {
       this.userFrom = JSON.parse(window.sessionStorage.getItem('user'));
-    },
-    // 修改头像成功
-    handleAvatarSuccess(res) {
-      this.imageUrl = res.data
     },
     // 修改头像
     async setAvatar() {
@@ -151,7 +146,7 @@ export default {
           return;
         }
         this.$blog.post('/admin/user/updatePwd', {
-          newPwd: this.$md5(this.UpdatePwdForm.newPwd),
+          newPwd: this.$rsa.encrypt(this.UpdatePwdForm.newPwd),
           id: this.$store.state.userInfo.id
         }).then(({data: res}) => {
           if (res.code === 401) {

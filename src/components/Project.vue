@@ -14,7 +14,7 @@
               <p class="info">{{project.content}}</p>
               <div class="proTech">
 <!--                <p class="tech">{{project.techs}}</p>-->
-                <el-tag v-for="tag in project.techs.split(',')" style="margin: 3px" size="small" closable>
+                <el-tag v-for="tag in project.techs.split(',')" style="margin: 3px" size="small">
                   {{ tag }}
                 </el-tag>
               </div>

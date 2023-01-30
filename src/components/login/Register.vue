@@ -104,14 +104,15 @@ export default {
         userRegister() {
             this.$refs.FormRef.validate(async valid => {
                 if (!valid) return;
-                this.user.username = this.Form.username
-                this.user.nickname = this.Form.nickname
-                this.user.email = this.Form.email
-                this.user.avatar = this.dialogImageUrl
-                this.user.password = this.$md5(this.Form.password)
-                const {data: res} = await this.$blog.post('/user/register', this.user)
+                let send = {
+                  username: this.Form.username,
+                  nickname: this.Form.nickname,
+                  email: this.Form.email,
+                  avatar: this.dialogImageUrl,
+                  password: this.$rsa.encrypt(this.Form.password)
+                };
+                const {data: res} = await this.$blog.post('/user/register', send)
                 if (res.code !== 0) return this.$message.error(res.msg)
-                // console.log(res)
                 this.$refs.FormRef.resetFields()
                 this.$message({message: '注册成功', type: 'success', offset: 80});
                 window.sessionStorage.setItem("token", JSON.stringify(res.data.token));
