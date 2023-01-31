@@ -67,48 +67,48 @@ export default {
 </script>
 
 <style scoped lang="less">
-    /*滑到顶部*/
-    #back-top span {
-        cursor: pointer;
-        height: 50px;
-        margin: -125px 0 0;
-        overflow: hidden;
-        padding: 0;
-        position: fixed;
-        right: 50px;
-        bottom: 50px;
-        width: 50px;
-        z-index: 11;
-        background-color: white;
-        box-shadow: 0 2px 4px rgba(0,0,0,.16);
-        border-radius: 50%;
-        display: flex;
-        opacity: 0.8;
-        justify-content: center;
-        align-items: center;
-        /*background: url('../assets/about/rocket.png') no-repeat;*/
-    }
-    #back-top:hover span{
-        opacity: 1;
-    }
-    .el-icon-arrow-up{
-        color: #ccc;
-        font-size: 40px;
-    }
+/*滑到顶部*/
+#back-top span {
+  cursor: pointer;
+  height: 50px;
+  margin: -125px 0 0;
+  overflow: hidden;
+  padding: 0;
+  position: fixed;
+  right: 50px;
+  bottom: 50px;
+  width: 50px;
+  z-index: 11;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,.16);
+  border-radius: 50%;
+  display: flex;
+  opacity: 0.8;
+  justify-content: center;
+  align-items: center;
+  /*background: url('../assets/about/rocket.png') no-repeat;*/
+}
+#back-top:hover span{
+  opacity: 1;
+}
+.el-icon-arrow-up{
+  color: #ccc;
+  font-size: 40px;
+}
 
-    .fade-enter{
-        opacity: 0;
-    }
-    .fade-enter-active{
-        transition: opacity 1s;
-    }
+.fade-enter{
+  opacity: 0;
+}
+.fade-enter-active{
+  transition: opacity 1s;
+}
 
-    .fade-leave-to{
-        opacity: 0;
-    }
-    .fade-leave-active{
-        transition: opacity 1s;
-    }
+.fade-leave-to{
+  opacity: 0;
+}
+.fade-leave-active{
+  transition: opacity 1s;
+}
 
 
 

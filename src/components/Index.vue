@@ -17,7 +17,7 @@
     <el-container id="index" class="animate__animated animate__fadeInUp">
       <el-row :gutter="24">
         <el-col :xs="24" :sm="17">
-          <el-card style="background-color: rgba(255,255,255,0.9); margin-left: -100px" class="left-item">
+          <el-card :style="isSmall ? 'background-color: rgba(255,255,255,0.9)' : 'background-color: rgba(255,255,255,0.9); margin-left: -100px'" class="left-item">
             <div slot="header" class="total">
               <div class="title">
                 <i v-if="selected" class="el-icon-back" @click="updateBlogList"></i>
@@ -33,9 +33,6 @@
                 <el-image class="blog-pic"
                           v-if="blog.firstPicture !== '' && blog.firstPicture !== undefined && blog.firstPicture !== null"
                           :src="$store.state.oss + blog.firstPicture"></el-image>
-                <el-image class="blog-pic"
-                          v-if="blog.firstPicture === '' || blog.firstPicture === undefined || blog.firstPicture === null"
-                          :src="$store.state.oss + 'default/load.gif'"></el-image>
               </el-col>
               <el-col :xs="24" :sm="16">
                 <div @click="getBlogInfo(blog.id)">
@@ -46,9 +43,6 @@
                       <el-avatar size="small"
                                  v-if="blog.userAvatar !== '' && blog.userAvatar !== undefined && blog.userAvatar !== null"
                                  :src="$store.state.oss + blog.userAvatar"></el-avatar>
-                      <el-avatar size="small"
-                                 v-if="blog.userAvatar === '' || blog.userAvatar === undefined || blog.userAvatar === null"
-                                 :src="$store.state.oss + 'default/avatar.png'"></el-avatar>
                       <a href="#" class="header">{{ blog.userNickName }}</a>
                     </div>
                     <div class="blog-date">
@@ -175,6 +169,7 @@ export default {
       timer: null,
       start: false,
       screenWidth: document.documentElement.clientWidth,  //实时屏幕宽度
+      isSmall: false
     }
   },
   computed: {
@@ -184,8 +179,10 @@ export default {
     // 计算分页栏样式
     pagLayout() {
       if (this.screenWidth < 768) {
+        this.isSmall = true;
         return 'prev, pager, next'
       } else {
+        this.isSmall = false;
         return 'total, prev, pager, next, jumper'
       }
     }
@@ -341,38 +338,6 @@ export default {
 
 <style scoped lang="less">
 
-@keyframes clipMe {
-
-  0%,
-  100% {
-    clip: rect(0px, 806px, 6px, 0px);
-  }
-
-  25% {
-    clip: rect(0px, 6px, 112px, 0px);
-  }
-
-  50% {
-    clip: rect(112px, 812px, 112px, 0px);
-  }
-
-  75% {
-    clip: rect(0px, 812px, 112px, 806px);
-  }
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translate(-50%, 0);
-  }
-  40% {
-    transform: translate(-50%, -30px);
-  }
-  60% {
-    transform: translate(-50%, -15px);
-  }
-}
-
 body {
   width: 100%;
 }
@@ -446,6 +411,39 @@ body {
   }
 }
 
+@keyframes clipMe {
+
+  0%,
+  100% {
+    clip: rect(0px, 806px, 6px, 0px);
+  }
+
+  25% {
+    clip: rect(0px, 6px, 112px, 0px);
+  }
+
+  50% {
+    clip: rect(112px, 812px, 112px, 0px);
+  }
+
+  75% {
+    clip: rect(0px, 812px, 112px, 806px);
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translate(-50%, 0);
+  }
+  40% {
+    transform: translate(-50%, -30px);
+  }
+  60% {
+    transform: translate(-50%, -15px);
+  }
+}
+
+
 ul {
   padding-left: 10px;
   padding-right: 10px;
@@ -507,7 +505,6 @@ ul {
     margin-right: 5px;
     margin-bottom: 10px;
     box-sizing: border-box;
-
     .tag {
       background-color: #ecf5ff;
       box-sizing: border-box;
@@ -545,9 +542,9 @@ ul {
   }
 
 
+
   .tag-item:hover, .activeTag {
     box-sizing: border-box;
-
     .tag {
       color: white;
       background-color: #409eff;

@@ -14,7 +14,16 @@
     </el-table-column>
     <el-table-column label="类别" width="100" align="center">
       <template slot-scope="scope">
-        <el-tag>
+        <el-tag v-if="scope.row.flag === '原创'">
+          {{ scope.row.flag }}
+        </el-tag>
+        <el-tag type="warning" v-else-if="scope.row.flag === '转载'">
+          {{ scope.row.flag }}
+        </el-tag>
+        <el-tag type="success" v-else-if="scope.row.flag === '翻译'">
+          {{ scope.row.flag }}
+        </el-tag>
+        <el-tag type="danger" v-else>
           {{ scope.row.flag }}
         </el-tag>
       </template>

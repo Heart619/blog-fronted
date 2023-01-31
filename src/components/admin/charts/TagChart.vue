@@ -59,7 +59,7 @@ export default {
                 let z = radius * Math.cos(a)
                 let scale = distance / (distance - z);
                 let fontSize = 12;
-                let color = "rgb(" + parseInt(Math.random() * 255) + "," + parseInt(Math.random() * 255) + "," + parseInt(Math.random() * 255) + ")";
+                let color = "rgb(" + Math.random() * 255 + "," + Math.random() * 255 + "," + Math.random() * 255 + ")";
                 let alpha = (z + radius) / (2 * radius)
                 let opacity = alpha + 0.5
                 let filter = "alpha(opacity = " + (alpha + 0.5) * 100 + ")";
@@ -88,7 +88,7 @@ export default {
                 let top = item.y + cy;
                 let transform = 'translate(-50%,-50%) scale(' + scale + ')';
                 item.opacity = alpha + 0.5;
-                item.zIndex = parseInt(scale * 100);
+                item.zIndex = scale * 100;
                 item.transform = transform;
                 item.webkitTransform = transform;
             });

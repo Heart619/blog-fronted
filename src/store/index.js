@@ -11,7 +11,7 @@ export default new Vuex.Store({
     loginFormVisiable:false,
     registorFormVisiable:false,
     pageName:'index',
-    oss: 'http://roxuynt15.hd-bkt.clouddn.com/',
+    oss: 'http://roxuynt15.hd-bkt.clouddn.com/', // dev
     // oss: 'http://rpbz8r33e.hd-bkt.clouddn.com/',
     errorPagePath: "/error"
   },

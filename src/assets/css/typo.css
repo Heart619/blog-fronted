@@ -5,6 +5,7 @@
   font-weight: 300;
   line-height: 1.8;
   text-align: left;
+  color: #000000;
 }
 
 /* 要注意表单元素并不继承父级 font 的问题 */
@@ -34,7 +35,7 @@
   position: relative;
   color: #999;
   font-weight: 400;
-  border-left: 1px solid #1abc9c;
+  border-left: 1px solid #070505;
   padding-left: 1em;
   margin: 1em 3em 1em 2em;
 }
@@ -102,7 +103,7 @@
 
 /* 让链接在 hover 状态下显示下划线 */
 .typo a {
-  color: #1abc9c;
+  color: #1a8bbc;
 }
 
 .typo a:hover {
@@ -110,7 +111,7 @@
 }
 
 .typo .typo a {
-  border-bottom: 1px solid #1abc9c;
+  border-bottom: 1px solid #1a8bbc;
 }
 
 .typo a:hover {
@@ -148,8 +149,8 @@
 }
 
 .typo pre {
-  background: #f8f8f8;
-  border: 1px solid #ddd;
+  background: rgba(248, 248, 248, 0);
+  border: 1px solid #b2b2b2;
   padding: 1em 1.5em;
   display: block;
   -webkit-overflow-scrolling: touch;
@@ -168,7 +169,7 @@
   /* 图片说明 */
 .typo figcaption {
   font-size: 0.9em;
-  color: #888;
+  color: #565555;
 }
 
 .typo strong, .typo b {

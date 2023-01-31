@@ -6,9 +6,6 @@
           <el-avatar size="small"
                      v-if="blog.userAvatar !== '' && blog.userAvatar !== undefined && blog.userAvatar !== null"
                      :src="$store.state.oss + blog.userAvatar"></el-avatar>
-          <el-avatar size="small"
-                     v-if="blog.userAvatar === '' || blog.userAvatar === undefined || blog.userAvatar === null"
-                     :src="$store.state.oss + 'default/avatar.png'"></el-avatar>
           <a href="#" class="header">{{ blog.userNickName }}</a>
         </div>
         <div class="blog-date">
@@ -23,17 +20,40 @@
       <el-image class="blog-pic"
                 v-if="blog.firstPicture !== '' && blog.firstPicture !== undefined && blog.firstPicture !== null"
                 :src="$store.state.oss + blog.firstPicture"></el-image>
-      <el-image class="blog-pic"
-                v-if="blog.firstPicture === '' || blog.firstPicture === undefined || blog.firstPicture === null"
-                :src="$store.state.oss + 'default/load.gif'"></el-image>
       <hr/>
       <h2 class="blog-title header">{{ blog.title }}
-        <el-tag effect="plain" type="warning" style="font-weight: bold; font-size: small; margin-left: 20px">
+        <!--        <el-tag type="warning" effect="plain" style="font-weight: bold; font-size: small; margin-left: 20px">-->
+        <!--          {{ blog.flag }}-->
+        <!--        </el-tag>-->
+        <el-tag v-if="blog.flag === '原创'" effect="plain" style="font-weight: bold; font-size: small; margin-left: 20px">
+          {{ blog.flag }}
+        </el-tag>
+        <el-tag type="warning" v-else-if="blog.flag === '转载'" effect="plain"
+                style="font-weight: bold; font-size: small; margin-left: 20px">
+          {{ blog.flag }}
+        </el-tag>
+        <el-tag type="success" v-else-if="blog.flag === '翻译'" effect="plain"
+                style="font-weight: bold; font-size: small; margin-left: 20px">
+          {{ blog.flag }}
+        </el-tag>
+        <el-tag type="danger" v-else effect="plain" style="font-weight: bold; font-size: small; margin-left: 20px">
           {{ blog.flag }}
         </el-tag>
       </h2>
-      <div class="typo m-padded-lr-responsive m-padded-tb-large"
-           v-html="blog.content"></div>
+      <!--      <div class="typo m-padded-lr-responsive m-padded-tb-large"-->
+      <!--           v-html="blog.content"></div>-->
+      <div class="content">
+        <mavon-editor
+            class="md"
+            :value="blog.content"
+            :subfield="prop.subfield"
+            :defaultOpen="prop.defaultOpen"
+            :toolbarsFlag="prop.toolbarsFlag"
+            :editable="prop.editable"
+            :scrollStyle="prop.scrollStyle"
+            :boxShadow="false"
+            />
+      </div>
       <div class="tags">
         <div class="tag-item" v-for="tag in blog.tags" :key="tag.id">
           <div class="sjx-outer">
@@ -44,26 +64,26 @@
           </div>
         </div>
       </div>
-<!--      <div class="appreciate">-->
-<!--        <el-popover-->
-<!--            placement="bottom"-->
-<!--            title=""-->
-<!--            width="300"-->
-<!--            trigger="hover"-->
-<!--            content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">-->
-<!--          <div class="give-money">-->
-<!--            <div class="give-money-item">-->
-<!--              <el-image :src="wechart" title="微信支付"></el-image>-->
-<!--              <p>微信</p>-->
-<!--            </div>-->
-<!--            <div class="give-money-item">-->
-<!--              <el-image :src="alipay" title="支付宝支付"></el-image>-->
-<!--              <p>支付宝</p>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <el-button class="zanshang" slot="reference" type="danger" round plain>赞赏</el-button>-->
-<!--        </el-popover>-->
-<!--      </div>-->
+      <!--      <div class="appreciate">-->
+      <!--        <el-popover-->
+      <!--            placement="bottom"-->
+      <!--            title=""-->
+      <!--            width="300"-->
+      <!--            trigger="hover"-->
+      <!--            content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">-->
+      <!--          <div class="give-money">-->
+      <!--            <div class="give-money-item">-->
+      <!--              <el-image :src="wechart" title="微信支付"></el-image>-->
+      <!--              <p>微信</p>-->
+      <!--            </div>-->
+      <!--            <div class="give-money-item">-->
+      <!--              <el-image :src="alipay" title="支付宝支付"></el-image>-->
+      <!--              <p>支付宝</p>-->
+      <!--            </div>-->
+      <!--          </div>-->
+      <!--          <el-button class="zanshang" slot="reference" type="danger" round plain>赞赏</el-button>-->
+      <!--        </el-popover>-->
+      <!--      </div>-->
       <div class="author">
         <ul>
           <li>作者 {{ blog.userNickName }}</li>
@@ -109,7 +129,8 @@
           </el-button>
         </div>
       </el-form>
-      <el-link v-show="!loading && page < totalPage" @click="lazyLoading">查看更多评论<i class="el-icon-view el-icon--right"></i></el-link>
+      <el-link v-show="!loading && page < totalPage" @click="lazyLoading">查看更多评论<i
+          class="el-icon-view el-icon--right"></i></el-link>
       <div :v-loading="loading" element-loading-text="正在加载"></div>
     </el-card>
   </el-container>
@@ -176,7 +197,17 @@ export default {
     ...mapState([
       'userInfo',
       'administrator',
-    ])
+    ]),
+    prop () {
+      let data = {
+        subfield: false,// 单双栏模式
+        defaultOpen: 'preview',//edit： 默认展示编辑区域 ， preview： 默认展示预览区域
+        editable: false,    // 是否允许编辑
+        toolbarsFlag: false,
+        scrollStyle: true
+      }
+      return data
+    }
   },
   methods: {
     lazyLoading() { // 滚动到底部，再加载的处理事件\
@@ -321,12 +352,18 @@ export default {
       }
     }
   },
-
 }
 </script>
 
 <style scoped lang="less">
 
+.md {
+  border: none !important;
+}
+
+.md {
+  background-color: white !important;
+}
 
 .el-card {
   width: 100%;

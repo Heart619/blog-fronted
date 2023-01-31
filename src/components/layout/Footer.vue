@@ -65,53 +65,53 @@ export default {
 </script>
 
 <style scoped lang="less">
-    *:hover{
-        cursor: pointer;
-    }
-    .footer-wrap {
-        bottom: 0 !important;
-        line-height: 2;
-        position: relative;
-        padding: 40px 20px;
-        color: #eee;
-        font-size: 14px;
-        text-align: center;
-        background-color: #545c64;
-        transition: .2s;
-    }
-    .footer-info{
-        line-height: 15px;
-        color: rgba(255,255,255,.5);
-        a{
-            text-decoration: none;
-            color: rgba(255,255,255,.5);
-        }
-        h4{
-            color: white;
-        }
+*:hover{
+  cursor: pointer;
+}
+.footer-wrap {
+  bottom: 0 !important;
+  line-height: 2;
+  position: relative;
+  padding: 40px 20px;
+  color: #eee;
+  font-size: 14px;
+  text-align: center;
+  background-color: #545c64;
+  transition: .2s;
+}
+.footer-info{
+  line-height: 15px;
+  color: rgba(255,255,255,.5);
+  a{
+    text-decoration: none;
+    color: rgba(255,255,255,.5);
+  }
+  h4{
+    color: white;
+  }
 
-        .list .item{
-            line-height: 20px;
-        }
+  .list .item{
+    line-height: 20px;
+  }
 
-        .list .item:hover{
-            color: white;
-        }
-        .el-image{
-            margin: 0 auto;
-            opacity: 0.8;
-        }
-        .el-image:hover{
-            opacity: 1;
-        }
-    }
-    .author{
-        color: rgba(255,255,255,.5);
-    }
+  .list .item:hover{
+    color: white;
+  }
+  .el-image{
+    margin: 0 auto;
+    opacity: 0.8;
+  }
+  .el-image:hover{
+    opacity: 1;
+  }
+}
+.author{
+  color: rgba(255,255,255,.5);
+}
 
-    @media only screen and (max-width: 480px) {
-        .ewm,.new-blog,.intro,.connect{
-            display: none;
-        }
-    }
+@media only screen and (max-width: 480px) {
+  .ewm,.new-blog,.intro,.connect{
+    display: none;
+  }
+}
 </style>

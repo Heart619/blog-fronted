@@ -158,13 +158,11 @@ export default {
   .el-menu {
     border: none;
     background-color: #333744;
-
-    .el-menu-item {
+    .el-menu-item{
       color: white;
       background-color: #333744;
     }
-
-    .el-menu-item:hover {
+    .el-menu-item:hover{
       background-color: #222222;
     }
   }
@@ -252,7 +250,7 @@ export default {
 
 @media screen and (max-width: 768px) {
 
-  .el-aside {
+  .el-aside{
     position: absolute;
     z-index: 2000;
     top: 60px;
@@ -260,25 +258,21 @@ export default {
     width: 100%;
     min-height: 0;
     background-color: transparent;
-
-    ::-webkit-scrollbar {
+    ::-webkit-scrollbar{
       width: 0;
     }
-
-    .el-menu {
+    .el-menu{
       width: 100%;
       display: flex;
       height: auto;
       background-color: white;
-
-      .el-menu-item {
+      .el-menu-item{
         color: #303133;
         background-color: white;
       }
     }
   }
-
-  .el-main {
+  .el-main{
     padding-top: 80px;
   }
 }

@@ -175,7 +175,6 @@ export default {
     }
     ,
     showLFV() {
-      // this.bgUrl = "url(\"http://www.dmoe.cc/random.php\")"
       this.$store.commit('showLFV')
     },
     showRFV() {
@@ -247,12 +246,16 @@ export default {
 }
 </script>
 
-<style scoped lang="less">
+<style>
+
 .search input.el-input__inner {
   background-color: rgba(0, 0, 0, 0.1);
   /*border-radius: 20px;*/
   color: #cccccc;
 }
+</style>
+
+<style scoped lang="less">
 
 .title {
   position: fixed;
@@ -276,7 +279,7 @@ export default {
   background-color: rgba(0, 0, 0, 0) !important;
 }
 
-.el-menu /deep/ .el-menu-item {
+.el-menu /deep/ .el-menu-item{
   background-color: rgba(0, 0, 0, 0) !important;
 }
 
@@ -475,7 +478,7 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
-  .el-menu /deep/ .el-menu-item {
+  .el-menu /deep/ .el-menu-item{
     background-color: rgba(0, 0, 0, 0.3) !important;
   }
 
