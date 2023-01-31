@@ -39,6 +39,7 @@ export default {
         window.addEventListener('scroll', this.getScroll);
     },
     destroyed() {
+
         window.removeEventListener('scroll', this.getScroll);
     },
     watch: {

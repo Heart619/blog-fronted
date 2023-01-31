@@ -9,7 +9,7 @@
           <el-button type="primary" @click="searchUser()">查找用户</el-button>
         </el-col>
       </el-row>
-      <el-table :data="userList" border>
+      <el-table :data="userList" border :default-sort="{prop: 'createTime', order: 'descending'}">
         <el-table-column type="index"></el-table-column>
         <el-table-column label="头像" prop="avatar" min-width="60px" align="center">
           <template slot-scope="scope">
@@ -19,7 +19,7 @@
         <el-table-column label="昵称" prop="nickname" align="center"></el-table-column>
         <el-table-column label="账号" prop="username" align="center"></el-table-column>
         <el-table-column label="邮箱" prop="email" min-width="100px"></el-table-column>
-        <el-table-column label="注册时间" prop="createTime" min-width="100px" align="center">
+        <el-table-column label="注册时间" sortable prop="createTime" min-width="100px" align="center">
           <template slot-scope="scope">{{ scope.row.createTime | dataFormat }}</template>
         </el-table-column>
         <el-table-column label="最近登录" prop="loginTime" align="center">

@@ -161,7 +161,7 @@ export default {
           })
         }
         if (res.data.code === 0) {
-          await this.getFullTypeList()
+          await this.getTypeList();
           this.$message.success("添加成功")
         } else {
           if (res.data.code === 401) {
@@ -185,7 +185,7 @@ export default {
         this.$blog.post(`/admin/type/${row.id}/delete`).then(({data: res}) => {
           if (res.code === 0) {
             this.$message.success(res.msg)
-            this.getFullTypeList()
+            this.getTypeList();
           } else {
             if (res.code === 401) {
               this.$router.push({path: this.$store.state.errorPagePath})

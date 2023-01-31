@@ -18,7 +18,7 @@
             </el-col>
           </el-row>
 
-          <el-table :data="essayList" border stripe>
+          <el-table :data="essayList" border stripe :default-sort="{prop: 'createTime', order: 'descending'}">
             <el-table-column type="index" align="center"></el-table-column>
             <el-table-column label="随笔标题" prop="title" width="700px"></el-table-column>
             <el-table-column v-if="$store.state.userInfo.type === 2" label="作者" prop="color" width="216px" align="center">
@@ -31,7 +31,7 @@
                 <el-tag :color="scope.row.color" class="essay-color"></el-tag>
               </template>
             </el-table-column>
-            <el-table-column label="发布时间" prop="createTime" width="120px" align="center">
+            <el-table-column label="发布时间" prop="createTime" sortable width="120px" align="center">
               <template slot-scope="scope">
                 {{scope.row.createTime | dataFormat }}
               </template>
@@ -158,7 +158,7 @@ export default {
     // 获取随笔列表
     async getEssayList() {
       let uid = this.$store.state.userInfo.type;
-      const {data: res} = await this.$blog.get(`/essay/list?page=${this.page}&limit=${this.limit}&search=${this.search}&userId=${uid === 2 ? '' : this.$store.state.userInfo.id}`)
+      const {data: res} = await this.$blog.get(`/essay/list/back?page=${this.page}&limit=${this.limit}&search=${this.search}&userId=${uid === 2 ? '' : this.$store.state.userInfo.id}`)
       if (res.code === 0) {
         this.totalCount = res.page.totalCount
         this.essayList = res.page.list

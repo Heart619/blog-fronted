@@ -21,7 +21,7 @@
       </el-select>
       <el-button @click="clearSearh">清除</el-button>
       <el-button type="primary" @click="searchBlogList">搜索</el-button>
-      <el-table :data="blogList" border stripe>
+      <el-table :data="blogList" border stripe :default-sort="{prop: 'createTime', order: 'descending'}">
         <el-table-column type="expand">
           <template slot-scope="scope">
             <div class="blog-information">
@@ -79,7 +79,7 @@
           </template>
         </el-table-column>
         <el-table-column label="阅读量" prop="views" width="100px" align="center"></el-table-column>
-        <el-table-column label="发布时间" prop="createTime" width="110px" align="center">
+        <el-table-column label="发布时间" sortable prop="createTime" width="110px" align="center">
           <template slot-scope="scope">
             {{ scope.row.createTime | dataFormat }}
           </template>

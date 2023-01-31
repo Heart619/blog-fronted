@@ -1,6 +1,6 @@
 <template>
   <el-dialog class="login_dialog" title="请登录" :visible.sync="$store.state.loginFormVisiable" @close="resetLoginForm"
-             width="400px" center>
+             width="400px" center :close-on-press-escape="false" :close-on-click-modal="false">
     <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" label-width="60px" class="login_form">
       <!--        用户名-->
       <el-form-item prop="username" label="账号">

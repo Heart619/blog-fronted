@@ -141,7 +141,11 @@ export default {
       },
       projectList: [],
       dialogImageUrl: '',
-      publishForm: {},
+      publishForm: {
+        title: '',
+        content: '',
+        url: ''
+      },
       dialogVisible: false,
       activeName: 'first',
       types: [

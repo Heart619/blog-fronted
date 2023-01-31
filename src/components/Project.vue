@@ -8,17 +8,16 @@
            v-for="project in projectList" :key="project.id">
         <a :href="project.url" style="text-decoration: none" target="_blank">
           <el-card class="project">
-            <el-image class="image" lazy :src="$store.state.oss + project.picUrl"></el-image>
-            <div class="pro-info">
-              <h3>{{project.title}}</h3>
-              <p class="info">{{project.content}}</p>
-              <div class="proTech">
-<!--                <p class="tech">{{project.techs}}</p>-->
-                <el-tag v-for="tag in project.techs.split(',')" style="margin: 3px" size="small">
-                  {{ tag }}
-                </el-tag>
+              <el-image class="image" lazy :src="$store.state.oss + project.picUrl"></el-image>
+              <div class="pro-info">
+                <h3>{{project.title}}</h3>
+                <p class="info" >{{project.content}}</p>
+                <div class="proTech">
+                  <el-tag v-for="tag in project.techs.split(',')" style="margin: 3px" size="small">
+                    {{ tag }}
+                  </el-tag>
+                </div>
               </div>
-            </div>
           </el-card>
         </a>
       </div>

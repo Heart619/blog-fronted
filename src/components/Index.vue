@@ -17,7 +17,7 @@
     <el-container id="index" class="animate__animated animate__fadeInUp">
       <el-row :gutter="24">
         <el-col :xs="24" :sm="17">
-          <el-card style="background-color: rgba(255,255,255,0.9)" class="left-item">
+          <el-card style="background-color: rgba(255,255,255,0.9); margin-left: -100px" class="left-item">
             <div slot="header" class="total">
               <div class="title">
                 <i v-if="selected" class="el-icon-back" @click="updateBlogList"></i>
@@ -79,7 +79,7 @@
           </el-pagination>
         </el-col>
         <el-col :xs="24" :sm="7">
-          <el-card style="background-color: rgba(255,255,255,0.9)"
+          <el-card style="background-color: rgba(255,255,255,0.9); margin-right: -50px"
                    class="animate__animated animate__fadeInUp right-item">
             <div slot="header" class="attributes">
               <b>分类</b>
@@ -106,7 +106,7 @@
               <i v-else class="el-icon-arrow-up"></i>
             </div>
           </el-card>
-          <el-card style="background-color: rgba(255,255,255,0.9)"
+          <el-card style="background-color: rgba(255,255,255,0.9); margin-right: -50px"
                    class="animate__animated animate__fadeInUp right-item">
             <div slot="header" class="attributes">
               <b>标签</b>
@@ -130,7 +130,7 @@
               <i v-else class="el-icon-arrow-up"></i>
             </div>
           </el-card>
-          <el-card style="background-color: rgba(255,255,255,0.9)"
+          <el-card style="background-color: rgba(255,255,255,0.9); margin-right: -50px"
                    class="animate__animated animate__fadeInUp right-item">
             <div slot="header" class="attributes">
               <span>最新推荐</span>
