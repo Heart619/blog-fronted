@@ -13,7 +13,7 @@
       </el-form-item>
       <el-form-item style="text-align: right">
         <el-button @click="resetLoginForm">取消</el-button>
-        <el-button type="primary" @click="userLogin">登录</el-button>
+        <el-button type="primary" @keyup.enter.native="userLogin" @click="userLogin">登录</el-button>
       </el-form-item>
     </el-form>
   </el-dialog>
