@@ -4,16 +4,15 @@
     <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" label-width="60px" class="login_form">
       <!--        用户名-->
       <el-form-item prop="username" label="账号">
-        <el-input v-model="loginForm.username">
-        </el-input>
+        <el-input v-model="loginForm.username" @keyup.enter.native="userLogin"></el-input>
       </el-form-item>
       <!--        密码-->
       <el-form-item prop="password" label="密码">
-        <el-input type="password" v-model="loginForm.password"></el-input>
+        <el-input type="password" v-model="loginForm.password" @keyup.enter.native="userLogin"></el-input>
       </el-form-item>
       <el-form-item style="text-align: right">
         <el-button @click="resetLoginForm">取消</el-button>
-        <el-button type="primary" @keyup.enter.native="userLogin" @click="userLogin">登录</el-button>
+        <el-button type="primary" :disabled="disable" @click="userLogin">登录</el-button>
       </el-form-item>
     </el-form>
   </el-dialog>
@@ -52,6 +51,7 @@ export default {
           {min: 6, max: 16, message: "长度在 6 到 16 个字符", trigger: "blur"}
         ]
       },
+      disable: false
     }
   },
   computed: {
@@ -68,15 +68,24 @@ export default {
     userLogin() {
       this.$refs.loginFormRef.validate(async valid => {
         if (!valid) return;
+
+        this.disable = true
+        setTimeout(() => {
+          this.disable = false
+        }, 600)
+
         let send = {username: this.loginForm.username, password: this.$rsa.encrypt(this.loginForm.password)}
-        const {data: res} = await this.$blog.post('/user/login', send);
-        if (res.code !== 0) return this.$message({message: res.msg, type: 'error', offset: 80})
-        this.$message({message: '登录成功', type: 'success', offset: 80});
-        this.$refs.loginFormRef.resetFields();
-        window.sessionStorage.setItem("token", JSON.stringify(res.data.token));
-        window.sessionStorage.setItem("user", JSON.stringify(res.data.user));
-        this.$store.commit('getUserInfo')
-        this.$store.commit('cancelLFV')
+        this.$blog.post('/user/login', send).then(({data: res}) => {
+          if (res.code !== 0) return this.$message({message: res.msg, type: 'error', offset: 80})
+          this.$message({message: '登录成功', type: 'success', offset: 80});
+          this.$refs.loginFormRef.resetFields();
+          window.sessionStorage.setItem("token", JSON.stringify(res.data.token));
+          window.sessionStorage.setItem("user", JSON.stringify(res.data.user));
+          this.$store.commit('getUserInfo')
+          this.$store.commit('cancelLFV')
+        }).catch(err => {
+          this.$message.error("网络繁忙，请稍后再试")
+        })
       })
     },
   }

@@ -125,10 +125,16 @@ export default {
       this.$refs.FormRef.resetFields()
       this.dialogImageUrl = ''
     },
-    // 用户登录
+    // 用户注册
     userRegister() {
       this.$refs.FormRef.validate(async valid => {
         if (!valid) return;
+
+        this.disable = true
+        setTimeout(() => {
+          this.disable = false
+        }, 600)
+
         let send = {
           username: this.Form.username,
           nickname: this.Form.nickname,

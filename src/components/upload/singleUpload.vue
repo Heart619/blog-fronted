@@ -76,7 +76,7 @@ export default {
       return new Promise((resolve, reject) => {
         _self.pre().then(({data}) => {
           _self.dataObj.token = data.token;
-          _self.dataObj.key = data.dir + "/" + uuidv4() + "_" + file.name;
+          _self.dataObj.key = data.dir + uuidv4() + "_" + file.name;
           resolve(true)
         }).catch(err => {
           reject(false)

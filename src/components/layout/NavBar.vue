@@ -158,7 +158,7 @@ export default {
   },
   created() {
     const idx = Math.floor(Math.random() * 21);
-    this.bgUrl = `url(${this.$store.state.oss}bg/${idx}.jpg)`
+    this.bgUrl = `url(${this.$store.state.oss}default/${idx}.jpg)`
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll);

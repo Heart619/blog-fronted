@@ -227,19 +227,19 @@ export default {
         {
           id: 3,
           name:'听音乐',
-          pic_url: `${this.$store.state.oss}about/music.jpg`,
+          pic_url: `${this.$store.state.oss}default/music.jpg`,
           desp:'这个不用多说，各种各样的音乐我都喜欢，而且喜欢边学习边听，哈哈'
         },
         {
           id: 4,
           name:'看电影',
-          pic_url:`${this.$store.state.oss}about/movie.jpg`,
+          pic_url:`${this.$store.state.oss}default/movie.jpg`,
           desp:'比较喜欢科幻片，虽然因为没钱，没在电影院没看过几部，但这也算一个爱好吧'
         },
         {
           id: 5,
           name:'阅读',
-          pic_url:`${this.$store.state.oss}about/book.jpg`,
+          pic_url:`${this.$store.state.oss}default/book.jpg`,
           desp:'阅读计算机相关技术书籍，越看越不会，越不会越想看'
         },
         // {
@@ -251,7 +251,7 @@ export default {
         {
           id: 7,
           name:'旅游',
-          pic_url:`${this.$store.state.oss}about/city.jpg`,
+          pic_url:`${this.$store.state.oss}default/city.jpg`,
           desp:'这只能算一个美好的愿望，等我有钱了，要去各种各样的地方玩，体验不一样的生活'
         },
       ],
