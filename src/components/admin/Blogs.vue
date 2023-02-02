@@ -189,7 +189,6 @@ export default {
       editing: false,
       commentList: [],
       typeList: [],
-      tagList: [],
       editTypeForm: {
         typeId: null,
         userId: null
@@ -232,7 +231,6 @@ export default {
   created() {
     this.getBlogList()
     this.getFullTypeList()
-    this.getFullTagList()
   },
   methods: {
     handleRemove() {
@@ -352,11 +350,6 @@ export default {
       const {data: res} = await this.$blog.get('/type/getAllType')
       this.typeList = res.data
     },
-    // 得到所有的标签
-    async getFullTagList() {
-      const {data: res} = await this.$blog.get('/tag/allTag')
-      this.tagList = res.data
-    },
     // 修改博客分类
     async changeBlogType(blog) {
       this.editTypeForm.typeId = blog.typeId;
@@ -407,8 +400,10 @@ export default {
         row.inputVisible = false
         return
       }
-      const newTag = this.tagList.find(item => item.name === row.inputValue.trim())
+      const newTag = row.tags.find(item => item.name === row.inputValue.trim())
       if (newTag !== undefined) {
+        row.inputValue = ''
+        row.inputVisible = false
         return;
       }
 

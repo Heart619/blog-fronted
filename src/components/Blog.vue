@@ -52,6 +52,7 @@
             :editable="prop.editable"
             :scrollStyle="prop.scrollStyle"
             :boxShadow="false"
+            :toolbars="toolbars"
             />
       </div>
       <div class="tags">
@@ -182,7 +183,11 @@ export default {
       loading: false,
       page: 1,
       limit: 8,
-      totalPage: 0
+      totalPage: 0,
+      toolbars: {
+        readmodel: true, // 沉浸式阅读
+        navigation: true, // 导航目录
+      }
     }
   },
   watch: {
@@ -203,7 +208,7 @@ export default {
         subfield: false,// 单双栏模式
         defaultOpen: 'preview',//edit： 默认展示编辑区域 ， preview： 默认展示预览区域
         editable: false,    // 是否允许编辑
-        toolbarsFlag: false,
+        toolbarsFlag: true,
         scrollStyle: true
       }
       return data
