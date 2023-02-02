@@ -131,7 +131,7 @@ export default {
   ,
   methods: {
     getUserInfo() {
-      this.userFrom = JSON.parse(window.sessionStorage.getItem('user'));
+      this.userFrom = JSON.parse(window.localStorage.getItem('user'));
     }
     ,
     // 修改头像
@@ -145,7 +145,7 @@ export default {
         return;
       }
       this.userInfo = res.data
-      window.sessionStorage.setItem('user', JSON.stringify(res.data))
+      window.localStorage.setItem('user', JSON.stringify(res.data))
       window.location.reload()
     }
     ,
@@ -156,7 +156,7 @@ export default {
         return;
       }
       if (res.code === 0) {
-        window.sessionStorage.setItem("user", JSON.stringify(this.userFrom));
+        window.localStorage.setItem("user", JSON.stringify(this.userFrom));
         this.$store.commit('getUserInfo')
         return this.$message.success(res.msg)
       } else {
@@ -182,7 +182,7 @@ export default {
           }
           if (res.code === 0) {
             this.userInfo = res.data
-            window.sessionStorage.setItem('user', JSON.stringify(res.data))
+            window.localStorage.setItem('user', JSON.stringify(res.data))
             this.$message.success("修改成功");
           } else {
             this.$message.error("网络繁忙，请稍后再试")

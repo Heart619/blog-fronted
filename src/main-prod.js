@@ -29,7 +29,7 @@ rsa.setPublicKey("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAogfO/bveLnn0Tb7dnx
 
 blog.interceptors.request.use(config => {
   NProgress.start()
-  config.headers.token = window.sessionStorage.getItem('token')
+  config.headers.token = window.localStorage.getItem('token')
   return config
 })
 

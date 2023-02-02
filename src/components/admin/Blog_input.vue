@@ -247,7 +247,7 @@ export default {
         this.blog.tagIds = this.publishForm.tags.toString().replace(/\[|]/g, '');
         this.blog.flag = this.publishForm.flag
         // console.log(this.blog.content)
-        this.blog.userId = JSON.parse(window.sessionStorage.getItem('user')).id;
+        this.blog.userId = JSON.parse(window.localStorage.getItem('user')).id;
         this.blog.typeId = this.blog.type.id
         this.blog.type = undefined;
         const {data: res} = await this.$blog.post('/admin/blog/save', this.blog);

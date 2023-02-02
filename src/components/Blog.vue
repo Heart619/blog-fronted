@@ -186,7 +186,7 @@ export default {
       totalPage: 0,
       toolbars: {
         readmodel: true, // 沉浸式阅读
-        navigation: true, // 导航目录
+        // navigation: true, // 导航目录
       }
     }
   },

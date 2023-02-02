@@ -85,7 +85,7 @@ export default {
   },
   created() {
     window.addEventListener('resize', this.screenAdapter)
-    this.userInfo = JSON.parse(window.sessionStorage.getItem('user'))
+    this.userInfo = JSON.parse(window.localStorage.getItem('user'))
   },
   methods: {
     calculateStyle() {
@@ -100,7 +100,7 @@ export default {
       this.$router.push('/')
     },
     logout() {
-      window.sessionStorage.clear()
+      window.localStorage.clear()
       this.$store.commit('getUserInfo')
       this.$router.push('/')
     },

@@ -63,7 +63,7 @@ const routes = [
             // from 代表从哪个路径跳转而来
             // next 是一个函数，表示放行
             // next() 放行  next('login') 强制跳转
-            const userInfo = JSON.parse(window.sessionStorage.getItem('user'))
+            const userInfo = JSON.parse(window.localStorage.getItem('user'))
             if (!userInfo) return next('/error')
             else {
                 if (userInfo.type === 0) return next('/error')

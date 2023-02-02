@@ -35,7 +35,7 @@ export default {
                 let comment = {}
                 comment.content = this.replyForm.content
                 comment.blogId = this.blogId
-                this.userInfo = JSON.parse(window.sessionStorage.getItem('user'))
+                this.userInfo = JSON.parse(window.localStorage.getItem('user'))
                 if (this.userInfo === null) {
                     this.$message({message: "请您登录后再发表评论！", type: 'error', offset: 80});
                 } else {

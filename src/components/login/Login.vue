@@ -79,8 +79,8 @@ export default {
           if (res.code !== 0) return this.$message({message: res.msg, type: 'error', offset: 80})
           this.$message({message: '登录成功', type: 'success', offset: 80});
           this.$refs.loginFormRef.resetFields();
-          window.sessionStorage.setItem("token", JSON.stringify(res.data.token));
-          window.sessionStorage.setItem("user", JSON.stringify(res.data.user));
+          window.localStorage.setItem("token", JSON.stringify(res.data.token));
+          window.localStorage.setItem("user", JSON.stringify(res.data.user));
           this.$store.commit('getUserInfo')
           this.$store.commit('cancelLFV')
         }).catch(err => {

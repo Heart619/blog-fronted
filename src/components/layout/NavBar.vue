@@ -223,7 +223,7 @@ export default {
     ,
 // 注销登录
     logout() {
-      window.sessionStorage.clear()
+      window.localStorage.clear()
       this.$store.commit('getUserInfo')
       this.$message({message: '退出登录成功', type: 'success', offset: 80});
     }

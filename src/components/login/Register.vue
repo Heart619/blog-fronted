@@ -146,8 +146,8 @@ export default {
         if (res.code !== 0) return this.$message.error(res.msg)
         this.$refs.FormRef.resetFields()
         this.$message({message: '注册成功', type: 'success', offset: 80});
-        window.sessionStorage.setItem("token", JSON.stringify(res.data.token));
-        window.sessionStorage.setItem("user", JSON.stringify(res.data.user));
+        window.localStorage.setItem("token", JSON.stringify(res.data.token));
+        window.localStorage.setItem("user", JSON.stringify(res.data.user));
         this.$store.commit('getUserInfo')
         this.$store.commit('cancelRFV')
       })
