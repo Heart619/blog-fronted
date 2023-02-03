@@ -32,6 +32,7 @@ Vue.prototype.$echarts = echarts
 // const blog = axios.create({ // 博客后台api地址
 //     baseURL: 'http://127.0.0.1:8090/',
 // })
+
 const blog = axios.create({ // 博客后台api地址
     baseURL: '/api',
 })
@@ -40,7 +41,9 @@ const rsa = new JSEncrypt();
 rsa.setPublicKey("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAg703+zHtuIrTWC5FJB0Msif7npCvIPXM+6rcFVEUZSSvR1BOu+YSEDAg7UqqG8lIujkhqBwksI+F4P9lRufM/TohMqKwBPAZia+Th1soltySb0nGWMqHrVYH48jloz5E5j62ZxwaWWYgg1AFCzIuO0/qUw1SPj5V0ltI86sNt+14EU+knhNL3kjpPlUaxDY/H3Ea8YIy6aZ3gI4SOZRq6+AS9iaRAaX6bXGbt9Vs54sPBartpULqCr3IZFozVnQVNCy7Ye0gSePebE8j91giHZNNnehnpkn45H8CzxwCpkMVL0xxZaCR9fVlTEinWHjhYyeDDVlpYjqkSS9u5QEYVwIDAQAB")
 
 // const picture = axios.create({ // 图片服务器api地址
-//     baseURL: '/api',
+//     baseURL: 'http://roxuynt15.hd-bkt.clouddn.com',
+//     method: 'post',
+//     responseType: 'arraybuffer',
 // })
 
 blog.interceptors.request.use(config => {

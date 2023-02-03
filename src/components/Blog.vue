@@ -53,7 +53,7 @@
             :scrollStyle="prop.scrollStyle"
             :boxShadow="false"
             :toolbars="toolbars"
-            />
+        />
       </div>
       <div class="tags">
         <div class="tag-item" v-for="tag in blog.tags" :key="tag.id">
@@ -118,6 +118,14 @@
           <p class="reply" v-show="cmt.showChildren && cmt.children.length === 0 && !loading">暂无更多回复</p>
         </div>
       </el-card>
+
+      <el-divider v-if="!loading && page + 1 <= totalPage" content-position="center">
+        <el-link  @click="lazyLoading">查看更多评论
+          <i class="el-icon-view el-icon--right"></i></el-link>
+      </el-divider>
+      <el-divider v-else-if="loading" content-position="center">正在加载评论...</el-divider>
+      <el-divider v-else content-position="center">暂无更多评论</el-divider>
+
       <el-form class="commmet-reply" :model="commentForm" :rules="commentFormRules" ref="commentFormRef">
         <el-form-item prop="content">
           <el-input v-model="commentForm.content" :validate-event="false" type="textarea"
@@ -130,9 +138,6 @@
           </el-button>
         </div>
       </el-form>
-      <el-link v-show="!loading && page < totalPage" @click="lazyLoading">查看更多评论<i
-          class="el-icon-view el-icon--right"></i></el-link>
-      <div :v-loading="loading" element-loading-text="正在加载"></div>
     </el-card>
   </el-container>
 </template>
@@ -203,7 +208,7 @@ export default {
       'userInfo',
       'administrator',
     ]),
-    prop () {
+    prop() {
       let data = {
         subfield: false,// 单双栏模式
         defaultOpen: 'preview',//edit： 默认展示编辑区域 ， preview： 默认展示预览区域
@@ -218,9 +223,10 @@ export default {
     lazyLoading() { // 滚动到底部，再加载的处理事件\
       // 滚动到底部，逻辑代码
       if (this.loading) return;
+      this.loading = true
       ++this.page;
-      if (this.page > this.totalPage) return;
       this.getBlogComments(this.blog.id);
+      this.loading = false
     },
     showCmt(cmt) {
       if (cmt.showChildren === false && cmt.children.length === 0) {
@@ -265,20 +271,16 @@ export default {
     },
 
     async getBlogComments(blog) {
-      this.loading = true
       this.$blog.get(`comment/list?blog=${blog}&page=${this.page}&limit=${this.limit}`).then(({data: res}) => {
         if (res.code !== 0) {
           this.$message.error("网络繁忙，请稍后再试")
-          this.loading = false
           return;
         }
         this.totalPage = res.page.totalPage
         this.rootCmtTree = [...this.rootCmtTree, ...res.page.list]
       }).catch(err => {
         this.$message.error(err.msg);
-        this.loading = false
       })
-      this.loading = false
     },
 
     translator(parent, children) {

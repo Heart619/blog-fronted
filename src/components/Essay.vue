@@ -14,6 +14,9 @@
             </p>
           </el-card>
         </el-timeline-item>
+        <el-divider v-if="page + 1 <= totalPage && !loading" content-position="center"><el-link type="info" @click="loadMore">点击查看更多<i class="el-icon-view el-icon--right"></i></el-link></el-divider>
+        <el-divider v-else-if="loading" content-position="center">正在加载详情...</el-divider>
+        <el-divider v-else content-position="center">暂无更多内容</el-divider>
       </el-timeline>
     </el-container>
   </div>
@@ -25,31 +28,21 @@ export default {
     return {
       essayList: [],
       page: 1,
-      limit: 3,
+      limit: 5,
       totalPage: 0,
+      loading: false
     }
   },
   created() {
     this.getEssayList()
   },
-  beforeDestroy() {
-    window.removeEventListener('scroll', this.lazyLoading);
-  },
-  mounted() {
-    window.addEventListener('scroll', this.lazyLoading); // 滚动到底部，再加载的处理事件
-  },
   methods: {
-    lazyLoading() { // 滚动到底部，再加载的处理事件\
-      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
-      const clientHeight = document.documentElement.clientHeight
-      const scrollHeight = document.documentElement.scrollHeight
-
-      if (scrollTop + clientHeight >= scrollHeight) {
-        // 滚动到底部，逻辑代码
-        ++this.page;
-        if (this.page > this.totalPage) return;
-        this.getEssayList();
-      }
+    loadMore() {
+      if (this.loading) return;
+      this.loading = true
+      ++this.page;
+      this.getEssayList();
+      this.loading = false
     },
     async getEssayList() {
       const {data: res} = await this.$blog.get(`/essay/list?page=${this.page}&limit=${this.limit}`);
