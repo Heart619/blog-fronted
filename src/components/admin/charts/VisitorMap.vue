@@ -123,7 +123,7 @@ export default {
         },300)
 
       } else {
-        if (res.code === 401) {
+        if (res.code === 444) {
           await this.$router.push({path: this.$store.state.errorPagePath})
           return;
         }

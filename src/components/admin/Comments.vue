@@ -72,7 +72,7 @@ export default {
       this.loading = true
       const {data: res} = await this.$blog.get(`/admin/comment/list?limit=${this.limit}&page=${this.page}`);
       this.loading = false
-      if (res.code === 401) {
+      if (res.code === 444) {
         await this.$router.push({path: this.$store.state.errorPagePath})
         return;
       }
@@ -97,7 +97,7 @@ export default {
           this.$message.success('删除成功！')
           return
         }
-        if (res.code === 401) {
+        if (res.code === 444) {
           await this.$router.push({path: this.$store.state.errorPagePath})
           return;
         }

@@ -148,6 +148,7 @@ export default {
         this.$message({message: '注册成功', type: 'success', offset: 80});
         window.localStorage.setItem("token", JSON.stringify(res.data.token));
         window.localStorage.setItem("user", JSON.stringify(res.data.user));
+        window.localStorage.setItem("refresh", JSON.stringify(res.data.refreshToken));
         this.$store.commit('getUserInfo')
         this.$store.commit('cancelRFV')
       })

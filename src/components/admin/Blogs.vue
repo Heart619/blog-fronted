@@ -262,7 +262,7 @@ export default {
         this.editPicDialogFormVisible = false
         return this.$message.success('修改首图成功！')
       } else {
-        if (res.code === 401) {
+        if (res.code === 444) {
           await this.$router.push({path: this.$store.state.errorPagePath})
           return;
         }
@@ -329,7 +329,7 @@ export default {
         return this.$message.info('已取消删除')
       }
       const {data: res} = await this.$blog.post(`/admin/blog/${id}/delete`);
-      if (res.code === 401) {
+      if (res.code === 444) {
         await this.$router.push({path: this.$store.state.errorPagePath})
         return;
       }
@@ -370,7 +370,7 @@ export default {
         userId: this.editTypeForm.userId,
         typeId: this.editTypeForm.typeId
       });
-      if (res.code === 401) {
+      if (res.code === 444) {
         await this.$router.push({path: this.$store.state.errorPagePath})
         return;
       }
@@ -418,7 +418,7 @@ export default {
           row.inputVisible = false
           this.$message.success('新增博客标签成功！')
         } else {
-          if (res.code === 401) {
+          if (res.code === 444) {
             this.$router.push({path: this.$store.state.errorPagePath})
             return;
           }
@@ -446,7 +446,7 @@ export default {
         if (res.code === 0) {
           this.$message.success('修改博客标签成功！')
         } else {
-          if (res.code === 401) {
+          if (res.code === 444) {
             this.$router.push({path: this.$store.state.errorPagePath})
             return;
           }
@@ -488,7 +488,7 @@ export default {
           this.typeList.push(res.data);
           this.$message.success("添加成功")
         } else {
-          if (res.code === 401) {
+          if (res.code === 444) {
             await this.$router.push({path: this.$store.state.errorPagePath})
             return;
           }

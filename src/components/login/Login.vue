@@ -81,6 +81,7 @@ export default {
           this.$refs.loginFormRef.resetFields();
           window.localStorage.setItem("token", JSON.stringify(res.data.token));
           window.localStorage.setItem("user", JSON.stringify(res.data.user));
+          window.localStorage.setItem("refresh", JSON.stringify(res.data.refreshToken));
           this.$store.commit('getUserInfo')
           this.$store.commit('cancelLFV')
         }).catch(err => {

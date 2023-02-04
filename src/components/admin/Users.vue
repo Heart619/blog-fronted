@@ -94,7 +94,7 @@ export default {
         this.totalCount = res.page.totalCount
         this.userList = res.page.list
       } else {
-        if (res.code === 401) {
+        if (res.code === 444) {
           await this.$router.push({path: this.$store.state.errorPagePath})
           return;
         }
@@ -108,7 +108,7 @@ export default {
     // 修改用户权限
     async userStateChanged(row) {
       const {data: res} = await this.$blog.post('/admin/user/update', row);
-      if (res.code === 401) {
+      if (res.code === 444) {
         await this.$router.push({path: this.$store.state.errorPagePath})
         return;
       }

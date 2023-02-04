@@ -160,7 +160,7 @@ export default {
   created() {
     if (this.$route.query.blogId !== undefined) {
       this.$blog.get(`/admin/blog/default/${this.$route.query.blogId}`).then(({data: res}) => {
-        if (res.code === 401) {
+        if (res.code === 444) {
           this.$router.push({path: this.$store.state.errorPagePath})
           return;
         }
@@ -178,7 +178,7 @@ export default {
       let formdata = new FormData();
       formdata.append('file', $file);
       const {data: res} = await this.$blog.post('/admin/pictures/upload', formdata)
-      if (res.code === 401) {
+      if (res.code === 444) {
         await this.$router.push({path: this.$store.state.errorPagePath})
         return;
       }
@@ -224,7 +224,7 @@ export default {
           this.$router.go(-1);
           return this.$message.success('修改博客成功！')
         } else {
-          if (res.code === 401) {
+          if (res.code === 444) {
             await this.$router.push({path: this.$store.state.errorPagePath})
             return;
           }
@@ -257,7 +257,7 @@ export default {
           await this.$router.push({path: '/admin/blogs'})
           return this.$message.success('发布博客成功！')
         } else {
-          if (res.code === 401) {
+          if (res.code === 444) {
             await this.$router.push({path: this.$store.state.errorPagePath})
             return;
           }
@@ -299,7 +299,7 @@ export default {
           this.typeList.push(res.data);
           this.$message.success("添加成功")
         } else {
-          if (res.code === 401) {
+          if (res.code === 444) {
             await this.$router.push({path: this.$store.state.errorPagePath})
             return;
           }
@@ -345,7 +345,7 @@ export default {
           this.inputTagVisible = false
           this.$message.success("添加成功")
         } else {
-          if (res.code === 401) {
+          if (res.code === 444) {
             this.$router.push({path: this.$store.state.errorPagePath})
             return;
           }

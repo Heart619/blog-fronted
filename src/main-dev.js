@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import Element from 'element-ui'
+import Element, {Message} from 'element-ui'
 import mavonEditor from 'mavon-editor'
 import marked from 'marked'
 import axios from 'axios'
@@ -19,8 +19,7 @@ import waterfall from 'vue-waterfall2'
 import vcolorpicker from 'vcolorpicker'
 import * as echarts from 'echarts'
 import md5 from 'js-md5'
-import { JSEncrypt } from 'jsencrypt'
-
+import {JSEncrypt} from 'jsencrypt'
 
 
 Vue.prototype.$md5 = md5;
@@ -52,9 +51,55 @@ blog.interceptors.request.use(config => {
     return config
 })
 
-blog.interceptors.response.use(config => {
+// blog.interceptors.response.use(config => {
+//     NProgress.done()
+//     return config
+// })
+
+//标志当前是否正在刷新token
+let isRefreshing = false;
+//请求队列
+let requests = [];
+blog.interceptors.response.use(res => {
     NProgress.done()
-    return config
+    if (res.data.code === 401) {
+        const config = res.config;
+        if (!isRefreshing) {
+            isRefreshing = true;
+            let refresh = window.localStorage.getItem('refresh');
+            //返回刷新token的回调的返回值，本来考虑到由于请求是异步的，所以return会先执行，导致返回一个undefined，那么就需要使用async+await，但实际上没有加也成功了
+            return blog.get('/user/refresh', {
+                headers: {refresh}
+            }).then(({data: res}) => {
+                if (res.code === 0) {
+                    window.localStorage.setItem("token", JSON.stringify(res.data));
+                    return blog(config)
+                } else if (res.code === 410) {
+                    Message.warning("登陆已过期，请重新登陆")
+                    // window.localStorage.clear()
+                    setTimeout(() => {
+                        window.location.href = "/"
+                    }, 800)
+                } else {
+                    window.location.href = "/"
+                    window.localStorage.clear()
+                }
+            }).catch(() => {
+                window.location.href = "/"
+                window.localStorage.clear()
+            }).finally(() => {
+                isRefreshing = false;
+            })
+        } else {
+            return new Promise(resolve => {
+                requests.push(() => {
+                    resolve(blog(config));
+                })
+            })
+        }
+    }
+
+    return res;
 })
 
 Vue.prototype.$blog = blog
@@ -98,15 +143,14 @@ Vue.filter('dataFormat3', function (originVal) {
 })
 
 
-
 Vue.filter('dataFormat4', function (originVal) {
     const dt = new Date(originVal)
     const y = dt.getFullYear()
     const m = (dt.getMonth() + 1 + '').padStart(2, '0')
     const d = (dt.getDate() + '').padStart(2, '0')
-    const h = (dt.getHours()+ '').padStart(2, '0')
-    const M = (dt.getMinutes()+ '').padStart(2, '0')
-    const s = (dt.getSeconds()+ '').padStart(2, '0')
+    const h = (dt.getHours() + '').padStart(2, '0')
+    const M = (dt.getMinutes() + '').padStart(2, '0')
+    const s = (dt.getSeconds() + '').padStart(2, '0')
     return `${y}-${m}-${d} ${h}:${M}:${s}`
 })
 

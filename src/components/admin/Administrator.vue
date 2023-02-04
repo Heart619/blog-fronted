@@ -140,7 +140,7 @@ export default {
         avatar: this.imageUrl,
         id: this.userInfo.id
       })
-      if (res.code === 401) {
+      if (res.code === 444) {
         await this.$router.push({path: this.$store.state.errorPagePath})
         return;
       }
@@ -151,7 +151,7 @@ export default {
     ,
     async changeUserInfo() {
       const {data: res} = await this.$blog.post('/admin/user/update', this.userFrom)
-      if (res.code === 401) {
+      if (res.code === 444) {
         await this.$router.push({path: this.$store.state.errorPagePath})
         return;
       }
@@ -176,7 +176,7 @@ export default {
           newPwd: this.$rsa.encrypt(this.UpdatePwdForm.newPwd),
           id: this.$store.state.userInfo.id
         }).then(({data: res}) => {
-          if (res.code === 401) {
+          if (res.code === 444) {
             this.$router.push({path: this.$store.state.errorPagePath})
             return;
           }

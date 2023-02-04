@@ -137,7 +137,7 @@ export default {
       let formdata = new FormData();
       formdata.append('file', $file);
       const {data: res} = await this.$blog.post('/admin/pictures/upload', formdata);
-      if (res.code === 401) {
+      if (res.code === 444) {
         await this.$router.push({path: this.$store.state.errorPagePath})
         return;
       }
@@ -204,7 +204,7 @@ export default {
         this.activeName = 'first'
         return this.$message.success('发布随笔成功！')
       } else {
-        if (res.code === 401) {
+        if (res.code === 444) {
           await this.$router.push({path: this.$store.state.errorPagePath})
           return;
         }
@@ -238,7 +238,7 @@ export default {
         await this.getEssayList()
         return this.$message.success('随笔删除成功！')
       } else {
-        if (res.code === 401) {
+        if (res.code === 444) {
           await this.$router.push({path: this.$store.state.errorPagePath})
           return;
         }

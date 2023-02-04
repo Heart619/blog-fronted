@@ -78,7 +78,7 @@
             <div slot="header" class="attributes">
               <b>分类</b>
             </div>
-            <ul>
+            <ul style="height: 250px; overflow-y: scroll;">
               <li class="animate__animated animate__fadeInUp blog-type" v-for="type in typeList"
                   :key="type.id"
                   @click="selectType(type.id)"
@@ -105,7 +105,7 @@
             <div slot="header" class="attributes">
               <b>标签</b>
             </div>
-            <div class="tags">
+            <div class="tags" style="height: 100px; overflow-y: scroll;">
               <div class="animate__animated animate__fadeInUp tag-item" v-for="tag in tagList"
                    :key="tag.id"
                    @click="selectTag(tag.id)"

@@ -164,7 +164,7 @@ export default {
           await this.getTypeList();
           this.$message.success("添加成功")
         } else {
-          if (res.data.code === 401) {
+          if (res.data.code === 444) {
             await this.$router.push({path: this.$store.state.errorPagePath})
             return;
           }
@@ -187,7 +187,7 @@ export default {
             this.$message.success(res.msg)
             this.getTypeList();
           } else {
-            if (res.code === 401) {
+            if (res.code === 444) {
               this.$router.push({path: this.$store.state.errorPagePath})
               return;
             }

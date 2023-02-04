@@ -261,7 +261,7 @@ export default {
         await this.getProjectList();
         this.activeName = 'first'
       } else {
-        if (res.code === 401) {
+        if (res.code === 444) {
           await this.$router.push({path: this.$store.state.errorPagePath})
           return;
         }
@@ -305,7 +305,7 @@ export default {
         await this.getProjectList()
         return this.$message.success('项目删除成功！')
       } else {
-        if (res.code === 401) {
+        if (res.code === 444) {
           await this.$router.push({path: this.$store.state.errorPagePath})
           return;
         }
@@ -318,7 +318,7 @@ export default {
       if (res.code === 0) {
         return this.$message.success('项目更新成功！')
       } else {
-        if (res.code === 401) {
+        if (res.code === 444) {
           await this.$router.push({path: this.$store.state.errorPagePath})
           return;
         }

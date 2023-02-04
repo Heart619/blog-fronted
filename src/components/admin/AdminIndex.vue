@@ -121,7 +121,7 @@ export default {
       this.loading = true
       const {data: res} = await this.$blog.get(`/admin/comment/list?limit=${this.limit}&page=${this.page}`);
       this.loading = false
-      if (res.code === 401) {
+      if (res.code === 444) {
         await this.$router.push({path: this.$store.state.errorPagePath})
         return;
       }
@@ -133,7 +133,7 @@ export default {
       const {data: res2} = await this.$blog.get('/admin/blog/getViewCount')
       const {data: res3} = await this.$blog.get('/admin/blog/getAppreciateCount')
       const {data: res4} = await this.$blog.get('/admin/comment/getCommentCount')
-      if (res === 401 || res2 === 401 || res3 === 401 || res4 === 401) {
+      if (res === 444 || res2 === 444 || res3 === 444 || res4 === 444) {
         await this.$router.push({path: this.$store.state.errorPagePath})
         return;
       }

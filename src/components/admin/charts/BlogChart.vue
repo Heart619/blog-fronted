@@ -125,7 +125,7 @@ export default {
         },
         async getViewsData() {
             const {data: res} = await this.$blog.get('/admin/blog/getViewCountByMonth')
-            if (res.code === 401) {
+            if (res.code === 444) {
               await this.$router.push({path: this.$store.state.errorPagePath})
               return;
             }
@@ -134,7 +134,7 @@ export default {
         },
         async getBlogData() {
             const {data: res} = await this.$blog.get('/admin/blog/getBlogCountByMonth')
-            if (res.code === 401) {
+            if (res.code === 444) {
               await this.$router.push({path: this.$store.state.errorPagePath})
               return;
             }
@@ -143,7 +143,7 @@ export default {
         },
         async getAppreciateCountByMonth() {
             const {data: res} = await this.$blog.get('/admin/blog/getAppreciateCountByMonth')
-            if (res.code === 401) {
+            if (res.code === 444) {
               await this.$router.push({path: this.$store.state.errorPagePath})
               return;
             }
@@ -153,7 +153,7 @@ export default {
         },
         async getCommentCountByMonth() {
             const {data: res} = await this.$blog.get('/admin/comment/getCommentCountByMonth')
-            if (res.code === 401) {
+            if (res.code === 444) {
               await this.$router.push({path: this.$store.state.errorPagePath})
               return;
             }
