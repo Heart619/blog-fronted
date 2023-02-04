@@ -254,8 +254,6 @@ export default {
       res = res.page
       this.blogList = res.list
       this.totalCount = res.totalCount
-      this.queryInfo.tagId = -1
-      this.queryInfo.typeId = -1
     },
     // 跳转到博客详情页
     getBlogInfo(blogId) {
@@ -298,6 +296,10 @@ export default {
       this.selected = false
       this.typeId = -1
       this.tagId = -1
+      this.queryInfo.typeId = -1
+      this.queryInfo.tagId = -1
+      this.queryInfo.page = 1
+      this.queryInfo.curPage = 1
       this.getBlogList()
       this.selectMethod = '全部博客';
     },
