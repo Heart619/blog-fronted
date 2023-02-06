@@ -5,14 +5,14 @@
       <template>
         <div v-for="p in pictureList" class="waterfall_item" :key="p.id">
           <el-card class="imgs">
+            <el-link type="primary" @click="updateShowStatus(p.id, 3)" v-show="p.type === 2">所有人可见</el-link>
+            <el-link type="warning" @click="updateShowStatus(p.id, 2)" v-show="p.type === 3">部分可见</el-link>
+            &nbsp&nbsp&nbsp&nbsp
+            <el-link type="danger" @click="deletePic(p.id, p.image)">删除照片</el-link>
             <div style="width: 100%; height: 100%">
-              <!--              <img class="images" v-if="p.image" :lazy-src="$store.state.oss + p.image" @click="showImg(p.image)"/>-->
               <el-image class="images" v-if="p.image" :src="$store.state.oss + p.image"
                         :preview-src-list="urlList"></el-image>
-              <span>{{ p.image }}</span>
-              <el-button size="mini" type="danger" circle @click="deletePic(p.id, p.image)">
-                <i class="el-icon-delete"></i>
-              </el-button>
+<!--              <span>{{ p.image }}</span>-->
             </div>
           </el-card>
         </div>
@@ -129,7 +129,7 @@ export default {
         });
       })
     },
-    lazyLoading () { // 滚动到底部，再加载的处理事件\
+    lazyLoading() { // 滚动到底部，再加载的处理事件\
       const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
       const clientHeight = document.documentElement.clientHeight
       const scrollHeight = document.documentElement.scrollHeight
@@ -181,7 +181,21 @@ export default {
         this.pictureList = temp;
         this.$message.success('删除成功！')
       }).catch(err => {
-        console.log(err)
+        this.$message.error('网络繁忙，请稍后再试')
+      })
+    },
+    updateShowStatus(id, t) {
+      this.$blog.post(`/admin/pictures/updateShowStatus`, {
+        id,
+        type: t
+      }).then(({data: res}) => {
+        if (res.code === 401) {
+          this.$router.push({path: this.$store.state.errorPagePath})
+          return;
+        }
+        for (let i = 0; i < this.pictureList.length; ++i)
+          if (this.pictureList[i].id === id) this.pictureList[i].type = t;
+      }).catch(err => {
         this.$message.error('网络繁忙，请稍后再试')
       })
     }

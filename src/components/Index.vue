@@ -21,7 +21,11 @@
             <div slot="header" class="total">
               <div class="title">
                 <i v-if="selected" class="el-icon-back" @click="updateBlogList"></i>
-                <span>{{ selectMethod }}</span>
+                <span v-show="typeId === -1 && tagId === -1">全部博客</span>
+                <span v-show="typeId !== -1">分类: {{ selectTypeVal }}</span>
+                &nbsp&nbsp&nbsp
+                <span v-show="typeId !== -1 && tagId !== -1">|&nbsp&nbsp&nbsp</span>
+                <span v-show="tagId !== -1">标签: {{ selectTagVal }}</span>
               </div>
               <span>共 <span style="color: #3a8ee6; font-size: 20px">{{ totalCount }}</span> 篇</span>
             </div>
@@ -81,13 +85,10 @@
             <ul style="height: 250px; overflow-y: scroll;">
               <li class="animate__animated animate__fadeInUp blog-type" v-for="type in typeList"
                   :key="type.id"
-                  @click="selectType(type.id)"
+                  @click="selectType(type)"
                   :class="type.id === typeId? 'activeType':''">
                 <div style="display: flex;align-items: center">
                   <el-image lazy v-if="type.picUrl !== '' && type.picUrl !== undefined && type.picUrl !== null"
-                            :src="$store.state.oss + type.picUrl"
-                            style="width: 28px;height: 28px; border-radius: 50%; margin-right: 10px"></el-image>
-                  <el-image lazy v-if="type.picUrl === '' || type.picUrl === undefined || type.picUrl === null"
                             :src="$store.state.oss + type.picUrl"
                             style="width: 28px;height: 28px; border-radius: 50%; margin-right: 10px"></el-image>
                   {{ type.name }}
@@ -108,7 +109,7 @@
             <div class="tags" style="height: 100px; overflow-y: scroll;">
               <div class="animate__animated animate__fadeInUp tag-item" v-for="tag in tagList"
                    :key="tag.id"
-                   @click="selectTag(tag.id)"
+                   @click="selectTag(tag)"
                    :class="tag.id === tagId? 'activeTag':''">
                 <div class="sjx-outer">
                   <div class="sjx-inner"></div>
@@ -159,7 +160,8 @@ export default {
       typeList: [],
       tagList: [],
       recommendList: [],
-      selectMethod: '全部博客',
+      selectTypeVal: '',
+      selectTagVal: '',
       typeId: -1,
       tagId: -1,
       selected: false,
@@ -270,26 +272,44 @@ export default {
       this.queryInfo.limit = newSize
     },
     // 按分类筛选博客
-    async selectType(id) {
-      this.tagId = -1
-      this.typeId = id
-      this.queryInfo.typeId = id
-      this.queryInfo.curPage = 1
-      this.queryInfo.page = 1
-      await this.getBlogList();
-      this.selectMethod = '分类: ' + this.typeList.find(item => item.id === this.typeId).name
-      this.selected = true
+    async selectType(type) {
+      let id = type.id
+      if (this.typeId === id) {
+        this.typeId = -1;
+        this.queryInfo.typeId = -1
+        this.queryInfo.curPage = 1
+        this.queryInfo.page = 1
+        await this.getBlogList();
+        this.selectTypeVal = ''
+      } else {
+        this.typeId = id
+        this.queryInfo.typeId = id
+        this.queryInfo.curPage = 1
+        this.queryInfo.page = 1
+        await this.getBlogList();
+        this.selectTypeVal = type.name
+      }
+      this.selected = this.typeId !== -1 || this.tagId !== -1
     },
     // 按标签筛选博客
-    async selectTag(id) {
-      this.typeId = -1
-      this.tagId = id
-      this.queryInfo.tagId = id
-      this.queryInfo.curPage = 1
-      this.queryInfo.page = 1
-      await this.getBlogList();
-      this.selectMethod = '标签: ' + this.tagList.find(item => item.id === this.tagId).name
-      this.selected = true
+    async selectTag(tag) {
+      let id = tag.id
+      if (this.tagId === id) {
+        this.tagId = -1;
+        this.queryInfo.tagId = -1
+        this.queryInfo.curPage = 1
+        this.queryInfo.page = 1
+        await this.getBlogList();
+        this.selectTagVal = ''
+      } else {
+        this.tagId = id
+        this.queryInfo.tagId = id
+        this.queryInfo.curPage = 1
+        this.queryInfo.page = 1
+        await this.getBlogList();
+        this.selectTagVal = tag.name
+      }
+      this.selected = this.typeId !== -1 || this.tagId !== -1
     },
     // 更新博客列表
     updateBlogList() {
@@ -301,7 +321,6 @@ export default {
       this.queryInfo.page = 1
       this.queryInfo.curPage = 1
       this.getBlogList()
-      this.selectMethod = '全部博客';
     },
     // 得到所有的分类
     async getFullTypeList() {

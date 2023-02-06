@@ -119,6 +119,11 @@ export default {
         },
         {
           id: 5,
+          authName: '照片墙',
+          path: 'pictures'
+        },
+        {
+          id: 6,
           authName: '关于我',
           path: 'about'
         },
@@ -128,7 +133,8 @@ export default {
         '2': 'iconfont icon-jilu2',
         '3': 'iconfont icon-xiangmu1',
         '4': 'iconfont icon-liuyan',
-        '5': 'iconfont icon-gerenzhongxin1',
+        '5': 'iconfont icon-jinengliang',
+        '6': 'iconfont icon-gerenzhongxin1',
       },
       isCollapse: false,
       menuHiddenVisiable: false,

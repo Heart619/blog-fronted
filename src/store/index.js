@@ -11,9 +11,10 @@ export default new Vuex.Store({
     loginFormVisiable:false,
     registorFormVisiable:false,
     pageName:'index',
-    // oss: 'http://roxuynt15.hd-bkt.clouddn.com/', // dev
+    webSocketAddr: '192.168.88.130:80',
+    oss: 'http://roxuynt15.hd-bkt.clouddn.com/', // dev
     // oss: 'https://192.168.88.130/oss/',
-    oss: 'http://rpbz8r33e.hd-bkt.clouddn.com/',
+    // oss: 'http://rpbz8r33e.hd-bkt.clouddn.com/',
     errorPagePath: "/error"
   },
   mutations: {

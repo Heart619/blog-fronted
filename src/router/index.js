@@ -31,6 +31,7 @@ const Users = () => import(/* webpackChunkName: "User" */ '../components/admin/U
 
 const Error = () => import(/* webpackChunkName: "Error" */ '../components/Error')
 const Pictures = () => import(/* webpackChunkName: "Pictures" */ '../components/admin/Pictures')
+const PrePictures = () => import(/* webpackChunkName: "PrePictures" */ '../components/Pictures')
 
 
 
@@ -51,6 +52,7 @@ const routes = [
             {path: '/blogInfo', component: Blog},
             {path: '/project', component: Project},
             {path: '/message', component: Message},
+            {path: '/pictures', component: PrePictures},
             {path: '/essay', component: Essay},
         ]
     },
