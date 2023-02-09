@@ -49,7 +49,7 @@ const routes = [
         children: [
             {path: '/index', component: Index},
             {path: '/about', component: About},
-            {path: '/blogInfo', component: Blog},
+            {path: '/:blogId.html', component: Blog},
             {path: '/project', component: Project},
             {path: '/message', component: Message},
             {path: '/pictures', component: PrePictures},

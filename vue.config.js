@@ -19,34 +19,46 @@ module.exports = {
                 /*也就是在前端使用/api可以直接替换为(http://localhost:9090)*/
             }
         },
-        // disableHostCheck: true,
+        disableHostCheck: true,
     },
-  chainWebpack: config => {
-    config.when(
-        process.env.NODE_ENV === 'production', config => {
-          config.entry('app').clear().add('./src/main-prod.js')
-          config.set('externals', {
-            vue: 'Vue',
-            vuex: "Vuex",
-            marked: "marked",
-            'vue-router': 'VueRouter',
-            axios: 'axios',
-            lodash: '_',
-            echarts: 'echarts',
-            nprogress: 'NProgress',
-            prism: 'Prism',
-          })
-          config.plugin('html').tap(args => {
-            args[0].isProd = true
-            return args
-          })
+    configureWebpack: {
+        output: { // 输出重构  打包编译后的 文件名称  【模块名称.版本号.时间戳】
+            filename: `static/js/[name].js`,
+            chunkFilename: `static/js/[name].js`
+        },
+    },
+    css: {
+        extract: {
+            filename: `static/css/[name].css`,
+            chunkFilename: `static/css/[name].css`
+        }
+    },
+    chainWebpack: config => {
+        config.when(
+            process.env.NODE_ENV === 'production', config => {
+                config.entry('app').clear().add('./src/main-prod.js')
+                config.set('externals', {
+                    vue: 'Vue',
+                    vuex: "Vuex",
+                    marked: "marked",
+                    'vue-router': 'VueRouter',
+                    axios: 'axios',
+                    lodash: '_',
+                    echarts: 'echarts',
+                    nprogress: 'NProgress',
+                    prism: 'Prism',
+                })
+                config.plugin('html').tap(args => {
+                    args[0].isProd = true
+                    return args
+                })
+            })
+        config.when(process.env.NODE_ENV === 'development', config => {
+            config.entry('app').clear().add('./src/main-dev.js')
+            config.plugin('html').tap(args => {
+                args[0].isProd = false
+                return args
+            })
         })
-    config.when(process.env.NODE_ENV === 'development', config => {
-      config.entry('app').clear().add('./src/main-dev.js')
-      config.plugin('html').tap(args => {
-        args[0].isProd = false
-        return args
-      })
-    })
-  },
+    },
 }

@@ -8,13 +8,13 @@ export default new Vuex.Store({
     userInfo: JSON.parse(window.localStorage.getItem('user')),
     token: JSON.parse(window.localStorage.getItem('token')),
     administrator:JSON.parse(window.localStorage.getItem('user'))!==null&&JSON.parse(window.localStorage.getItem('user')).type > 0,
-    loginFormVisiable:false,
-    registorFormVisiable:false,
-    pageName:'index',
-    webSocketAddr: '192.168.88.130:80',
-    oss: 'http://roxuynt15.hd-bkt.clouddn.com/', // dev
-    // oss: 'https://192.168.88.130/oss/',
-    // oss: 'http://rpbz8r33e.hd-bkt.clouddn.com/',
+    loginFormVisiable: false,
+    registorFormVisiable: false,
+    pageName: 'index',
+    // webSocketAddr: 'ws://192.168.88.130/websocket/',
+    // oss: 'http://roxuynt15.hd-bkt.clouddn.com/', // dev
+    oss: 'http://8.130.52.252/oss/',
+    webSocketAddr: 'ws://8.130.52.252/websocket/',
     errorPagePath: "/error"
   },
   mutations: {

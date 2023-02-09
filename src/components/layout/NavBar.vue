@@ -206,9 +206,8 @@ export default {
 // 跳转到博客详情页
     getBlogInfo(blogId) {
       this.$store.commit('changeBlogKey')
-      this.$router.push({path: '/blogInfo', query: {id: blogId}});
-    }
-    ,
+      this.$router.push({path: `/${blogId}.html`});
+    },
     // 跳转首页
     toIndex() {
       if (this.$route.path === '/index') {
@@ -285,7 +284,7 @@ export default {
   background-color: rgba(0, 0, 0, 0) !important;
 }
 
-.el-menu /deep/ .el-menu-item{
+.el-menu /deep/ .el-menu-item {
   background-color: rgba(0, 0, 0, 0) !important;
 }
 
@@ -484,7 +483,7 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
-  .el-menu /deep/ .el-menu-item{
+  .el-menu /deep/ .el-menu-item {
     background-color: rgba(0, 0, 0, 0.3) !important;
   }
 

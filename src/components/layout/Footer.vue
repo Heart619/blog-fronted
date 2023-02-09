@@ -61,7 +61,7 @@ export default {
       this.isWebSocket = false;
     } else {
       const that = this;
-      let address = `ws://${this.$store.state.webSocketAddr}/websocket/online`;
+      let address = `${this.$store.state.webSocketAddr}online`;
       var ws = new WebSocket(address);
       ws.onmessage = function (evt) {
         that.online = 1 * evt.data;
@@ -75,7 +75,7 @@ export default {
     },
     toBlog(id) {
       this.$router.push({
-        'path': `/blogInfo?id=${id}`
+        'path': `/${id}.html`
       }).then(res => {
         window.scrollTo({top: 0, behavior: 'smooth'})
       })

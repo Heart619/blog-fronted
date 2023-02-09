@@ -259,8 +259,7 @@ export default {
     },
     // 跳转到博客详情页
     getBlogInfo(blogId) {
-      // console.log(blogId.id)
-      this.$router.push({path: '/blogInfo', query: {id: blogId}});
+      this.$router.push({path: `/${blogId}.html`});
     },
     // 修改当前页码
     handleCurrentChange(newSize) {

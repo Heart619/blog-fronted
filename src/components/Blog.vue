@@ -259,7 +259,7 @@ export default {
     },
     // 获取博客详情信息
     async getBlogInfomation() {
-      const {data: res} = await this.$blog.get(`/blog/${this.$route.query.id}.html`)
+      const {data: res} = await this.$blog.get(`/blog/${this.$route.params.blogId}.html`)
       if (res.code !== 0) {
         this.$message.error(res.msg);
         return;

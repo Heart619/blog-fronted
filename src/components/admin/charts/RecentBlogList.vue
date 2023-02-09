@@ -63,7 +63,7 @@ export default {
       },
       // 跳转到博客详情页
       getBlogInfo(blogId) {
-          this.$router.push({path: '/blogInfo', query: {id: blogId}});
+          this.$router.push({path: `/${blogId}.html`});
       },
   }
 }
