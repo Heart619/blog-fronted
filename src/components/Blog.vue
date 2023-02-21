@@ -101,7 +101,7 @@
                  :blog-author="blog.userId" :blog-id="blog.id" :comment="cmt"
                  v-on:quit="cancel" v-on:newCmt="replyComp"></reply>
           <span v-else class="reply" @click="rpActiveId = cmt.id">回复</span>
-          <span v-if="administrator || userInfo && cmt.userId === userInfo.id" class="delete"
+          <span v-if="userInfo && (cmt.userId === userInfo.id || userInfo.type === 2)" class="delete"
                 @click="deleteComment(cmt.id, rootCmtTree, idx)">删除</span>
           <div v-show="cmt.showChildren" style="margin-left: 40px" v-for="(rp, idx) in cmt.children" :key="rp.id">
             <comment :cmt="rp" :parent-id="cmt.id" :rp-active-id="rpActiveId"></comment>
@@ -109,7 +109,7 @@
                    :blog-author="blog.userId" :blog-id="blog.id" :comment="cmt"
                    v-on:quit="cancel" v-on:newCmt="replyComp"></reply>
             <span v-else class="reply" @click="rpActiveId = rp.id">回复</span>
-            <span v-if=" administrator || userInfo && rp.userId === userInfo.id" class="delete"
+            <span v-if="userInfo && (rp.userId === userInfo.id || userInfo.type === 2)" class="delete"
                   @click="deleteComment(rp.id, cmt.children, idx)">删除</span>
           </div>
           <hr>

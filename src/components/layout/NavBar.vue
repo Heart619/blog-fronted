@@ -165,6 +165,26 @@ export default {
   created() {
     const idx = Math.floor(Math.random() * 21);
     this.bgUrl = `url(${this.$store.state.oss}default/${idx}.jpg)`
+    if (this.$store.state.administrator) {
+      this.$blog.get(`/admin/user/checkVerify`).then(({data: res}) => {
+        if (res.code === 0) {
+          this.$store.state.userInfo = res.data
+          this.$store.state.administrator = res.data.type > 0
+        } else if (res.code === 444) {
+          this.$store.state.administrator = false;
+          this.$router.push({path: '/'})
+          window.localStorage.clear()
+          this.$store.commit('getUserInfo')
+          this.$message.warning("登陆状态异常，请重新登陆")
+        } else {
+          this.$message.warning("网络繁忙，请稍后再试")
+          this.$store.state.administrator = false;
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$store.state.administrator = false;
+      })
+    }
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll);
@@ -231,8 +251,7 @@ export default {
       window.localStorage.clear()
       this.$store.commit('getUserInfo')
       this.$message({message: '退出登录成功', type: 'success', offset: 80});
-    }
-    ,
+    },
 // 进入管理界面
     manageBlog() {
       if (this.$store.state.userInfo.type === 2) this.$router.push('/admin')
@@ -246,7 +265,7 @@ export default {
       } else {
         this.headerBottom = 0
       }
-    },
+    }
   }
 }
 </script>

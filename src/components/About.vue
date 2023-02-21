@@ -240,14 +240,14 @@ export default {
           id: 5,
           name:'阅读',
           pic_url:`${this.$store.state.oss}default/book.jpg`,
-          desp:'阅读计算机相关技术书籍，越看越不会，越不会越想看'
+          desp:'阅读计算机相关技术书籍，总想学习新技术'
         },
-        // {
-        //   id: 6,
-        //   name:'骑车',
-        //   pic_url:'http://hikari.top/images/b05702ea-673b-46ff-8f03-17db351c3845.jpeg',
-        //   desp:'虽然我大学才雪会骑车，但看着别人出去远距离骑行也是挺羡慕的，希望有时间可以去试试'
-        // },
+        {
+          id: 6,
+          name:'游戏',
+          pic_url:`${this.$store.state.oss}default/game.jpg`,
+          desp:'空闲时间喜欢玩各种游戏，尤其是多人联机那类的游戏'
+        },
         {
           id: 7,
           name:'旅游',
